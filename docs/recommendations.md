@@ -40,30 +40,24 @@ first. Each one says what to change and why. Done items are at the bottom.
      say "your agent" / "an AI agent". Pick one.
    - The line is also close to Amboras's tagline ("Build, run, and grow your next
      brand with agents"). Consider making it more distinct.
-7. **Decide what to do with `/v2`.**
-   - The comparison page (concept B) is hidden from search (`noindex`), but anyone
-     with the link can open it.
-   - Delete it (`app/(site)/v2`, `components/v2`, `tests/v2.test.tsx`) or keep
-     it on purpose.
-
 ## Conversion and clarity
 
-8. **Move the phone hero's content up.**
+7. **Move the phone hero's content up.**
    - On phones the top third of the first screen is empty gradient, and nothing
      hints that there's more below.
    - Drop the full-screen height on phones, so the headline starts higher and the
      next section peeks in.
-9. **Fewer demos in a row.**
+8. **Fewer demos in a row.**
    - The four boxes, the three steps and the four tabs show nine "you ask, ResAI
      does it" examples back to back.
    - One or two make the point. Consider trimming the boxes to two, or merging the
      steps into the tabs.
-10. **Shorter page.**
+9. **Shorter page.**
     - The page is about 10.6 screens on desktop and 12.7 on phones; Amboras is
       about 6.
     - Section spacing is 128px on desktop (`sm:py-32` / `sm:pb-32`). Bringing it
       to about 96px, plus item 9, would cut it noticeably.
-11. **Vision placement.**
+10. **Vision placement.**
     - "The POS in your pocket" (a future phone POS with tap-to-pay) is labelled
       "planned", but it can still make people wonder whether ResAI is an
       assistant or a POS.
@@ -72,12 +66,12 @@ first. Each one says what to change and why. Done items are at the bottom.
 
 ## Accessibility and code health
 
-12. **Pause control for the rotating word.**
+11. **Pause control for the rotating word.**
     - The hero word keeps cycling while it's on screen. It pauses off screen and
       on hidden tabs, and reduced motion shows "restaurant" only.
     - WCAG 2.2.2 still asks for a way to pause text that keeps changing. A small
       pause button would cover it.
-13. **Full-repo lint is blocked.**
+12. **Full-repo lint is blocked.**
     - `components/ui/doodle-crew-footer-sunny.tsx` has two lint errors: a
       function used before it's declared, and state set directly in an effect.
     - Fix them before relying on `npm run lint` in CI.
@@ -93,5 +87,6 @@ first. Each one says what to change and why. Done items are at the bottom.
 - Reassurance under the hero buttons: "Free to join · Nothing changes without
   your OK."
 - The four example boxes swipe sideways on phones.
+- Removed the `/v2` comparison page.
 - Removed the "Help shape ResAI" early-access section; the join page already
   shows the same perks and questions.

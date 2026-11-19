@@ -20,7 +20,7 @@ app/
   layout.tsx              Fonts, metadata, skip link (each area brings its own chrome)
   (site)/                 Public site: layout (header, footer, waitlist page),
                           page.tsx (landing page sections + JSON-LD), privacy/,
-                          terms/, opt-out/, v2/ (landing page B, noindex)
+                          terms/, opt-out/
   api/waitlist/route.ts   POST: waitlist signup
   api/opt-out/route.ts    POST: outreach opt-out
   opengraph-image.tsx     Generated 1200×630 OG image
@@ -39,7 +39,7 @@ components/
   site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
-                          Magic UI effects, and the phone swipe row
+                          Magic UI effects, the phone swipe row, and the doodle footer
 lib/
   site.ts                 Site name, URL, contact email, privacy-notice version and date
   faq.ts                  FAQ copy (page + structured data)
@@ -108,7 +108,7 @@ IP per 10 minutes.
 
 ## Tests
 
-`npm test` runs 110 tests:
+`npm test` runs 107 tests:
 
 | Suite | Covers |
 | --- | --- |
@@ -121,4 +121,3 @@ IP per 10 minutes.
 | `demo-logic.test.ts` | Prompt routing and price math |
 | `agent-demo.test.tsx` | Labeling, autoplay, scenario selection, approval copy, rounding toggle, free-text fallback |
 | `home-sections.test.tsx` | Hero headline and tiles, the rotating business word (keeps cycling, matching icons, pauses on a hidden tab, reduced motion), the phone swipe row's dots, the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
-| `v2.test.tsx` | Landing page B: the before/after demo, task tabs, the floating join card |
