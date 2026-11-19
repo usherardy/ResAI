@@ -1,6 +1,5 @@
-import { ChefHatIcon, MessagesSquareIcon, ReceiptTextIcon } from "lucide-react";
+import { ChefHatIcon, MessagesSquareIcon, TrendingUpIcon } from "lucide-react";
 import { Container } from "@/components/site/section";
-import { Showcase } from "@/components/sections/showcase";
 import { PopTile } from "@/components/ui/pop-tile";
 import { RevealOnView } from "@/components/ui/reveal-on-view";
 import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
@@ -15,34 +14,39 @@ export function Hero() {
             above it, unfaded. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 -bottom-20 -z-10 bg-hero-gradient [mask-image:linear-gradient(to_bottom,#000_calc(100%_-_15rem),rgb(0_0_0/0.85)_calc(100%_-_10rem),rgb(0_0_0/0.4)_calc(100%_-_5rem),transparent)]"
+          className="pointer-events-none absolute inset-x-0 top-0 -bottom-32 -z-10 bg-hero-gradient [mask-image:linear-gradient(to_bottom,#000_calc(100%_-_20rem),rgb(0_0_0/0.8)_calc(100%_-_14rem),rgb(0_0_0/0.45)_calc(100%_-_8rem),rgb(0_0_0/0.15)_calc(100%_-_3.5rem),transparent)]"
         />
         <Container className="py-14 text-center sm:py-24">
-          {/* Three fixed lines. It first reads as a plain sentence; on load
-              each tile's slot widens (the words glide apart) and the tile pops
-              in, one line after another, then bobs gently. The font scales
-              with the screen so each line fits on one row. The {" "} between
-              lines keeps it a proper sentence for screen readers. */}
+          {/* Fixed lines: three from tablet width up, four on phones (the
+              first line splits after "run,"), so the headline stays big. It
+              first reads as a plain sentence; on load each tile's slot widens
+              (the words glide apart) and the tile pops in, one line after
+              another, then bobs gently. The font scales with the screen so
+              each line fits on one row. The {" "} between lines keeps it a
+              proper sentence for screen readers. */}
           <RevealOnView
             as="h1"
             id="hero-title"
             threshold={0.3}
-            className="group mx-auto font-display text-[clamp(2.2rem,12vw,6rem)] leading-[1.12] font-semibold tracking-[-0.05em]"
+            className="group mx-auto font-display text-[clamp(2.2rem,11vw,6rem)] leading-[1.12] font-semibold tracking-[-0.05em] sm:text-[clamp(2.2rem,8.8vw,6rem)]"
           >
             <span className="block whitespace-nowrap">
-              ResAI is your{" "}
-              <PopTile
-                icon={ChefHatIcon}
-                delay={150}
-                end
-                floating
-                className="bg-linear-to-br from-[rgb(245,140,2)] to-[rgb(245,87,2)]"
-              />
+              Build, run,{" "}
+              <span className="block sm:inline">
+                and grow{" "}
+                <PopTile
+                  icon={TrendingUpIcon}
+                  delay={150}
+                  end
+                  floating
+                  className="bg-linear-to-br from-[rgb(245,140,2)] to-[rgb(245,87,2)]"
+                />
+              </span>
             </span>{" "}
             <span className="block whitespace-nowrap">
-              restaurant&rsquo;s{" "}
+              your restaurant{" "}
               <PopTile
-                icon={ReceiptTextIcon}
+                icon={ChefHatIcon}
                 delay={290}
                 end
                 floating
@@ -50,14 +54,14 @@ export function Hero() {
               />
             </span>{" "}
             <span className="block whitespace-nowrap">
-              AI{" "}
+              with{" "}
               <PopTile
                 icon={MessagesSquareIcon}
                 delay={430}
                 floating
                 className="bg-linear-to-br from-[rgb(148,201,233)] to-[rgb(110,160,230)]"
               />
-              agent
+              agents.
             </span>
           </RevealOnView>
           <p className="mx-auto mt-6 max-w-xl animate-fade-up text-lg leading-relaxed text-pretty text-foreground/80 [animation-delay:450ms] motion-reduce:animate-none sm:mt-8 sm:text-xl">
@@ -74,11 +78,6 @@ export function Hero() {
             </a>
           </div>
         </Container>
-      </div>
-
-      {/* relative: paints the tiles above the gradient's fading tail. */}
-      <div className="relative pt-10 sm:pt-14">
-        <Showcase />
       </div>
     </section>
   );

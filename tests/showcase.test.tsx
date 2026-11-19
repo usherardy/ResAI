@@ -13,7 +13,7 @@ describe("Showcase", () => {
     // The approve buttons inside the example cards can't be reached.
     expect(screen.queryByRole("button", { name: /approve/i })).toBeNull();
     // A plain description stands in for the tiles.
-    expect(screen.getByText(/concept previews with example data\. try them/i)).toBeInTheDocument();
+    expect(screen.getByText(/concept previews with example data\. try some of them in the demo above/i)).toBeInTheDocument();
   });
 
   it("has a visible control that pauses and resumes the scrolling", async () => {

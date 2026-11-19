@@ -33,9 +33,9 @@ components/
     scenarios.ts            The six scripted scenarios (all example data)
     match-prompt.ts         Routes typed text to a scenario, or admits it can't
     cards/                  One result card per scenario
-  sections/               Hero + showcase strip, features ("one sentence" boxes,
-                          played by feature-video), how it works, demo (assistant
-                          tabs), vision, founder, waitlist, FAQ, closing CTA
+  sections/               Hero, features ("one sentence" boxes, played by
+                          feature-video), how it works, demo (assistant tabs),
+                          vision, showcase strip, founder, waitlist, FAQ, closing CTA
   site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
@@ -59,7 +59,7 @@ docs/                     You are here
 
 Page order (`app/(site)/page.tsx`): Hero → Features ("One sentence instead of a dozen
 clicks" boxes) → How it works → Demo ("One assistant for the whole back office" tabs) →
-Vision → Founder → Waitlist → FAQ → Closing CTA.
+Vision → Showcase (scrolling example tiles) → Founder → Waitlist → FAQ → Closing CTA.
 
 ## Request path for a signup
 

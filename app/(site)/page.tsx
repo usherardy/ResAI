@@ -5,6 +5,7 @@ import { Features } from "@/components/sections/features";
 import { FounderStory } from "@/components/sections/founder";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { Showcase } from "@/components/sections/showcase";
 import { Vision } from "@/components/sections/vision";
 import { Waitlist } from "@/components/sections/waitlist";
 import { faqs } from "@/lib/faq";
@@ -55,6 +56,7 @@ export default function HomePage() {
       <HowItWorks />
       <Demo />
       <Vision />
+      <Showcase />
       <FounderStory />
       <Waitlist />
       <Faq />

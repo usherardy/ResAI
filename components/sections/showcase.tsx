@@ -56,17 +56,18 @@ const tiles: { id: ScenarioId; tag: string; tone: string; card: React.ReactNode 
 
 /**
  * A slow strip of large tiles, each showing a request and the draft ResAI
- * would come back with. Decorative: the tiles are inert, and the same
- * examples are fully usable in the demo further down.
+ * would come back with. Sits after the Vision section. Decorative: the
+ * tiles are inert, and four of them can be played in the assistant tabs
+ * further up.
  */
 export function Showcase() {
   const [paused, setPaused] = useState(false);
 
   return (
-    <div className="pb-6">
+    <section aria-label="Example requests" className="pb-16 sm:pb-24">
       <p className="sr-only">
         Example requests and the drafts ResAI would return, shown as concept
-        previews with example data. Try them in the interactive demo below.
+        previews with example data. Try some of them in the demo above.
       </p>
       <div className="[mask-image:linear-gradient(to_right,transparent,black_4%,black_96%,transparent)] motion-reduce:[mask-image:none]">
         <Marquee
@@ -114,6 +115,6 @@ export function Showcase() {
           <span className="sr-only">{paused ? "Play" : "Pause"} scrolling examples</span>
         </button>
       </Container>
-    </div>
+    </section>
   );
 }

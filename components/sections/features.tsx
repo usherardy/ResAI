@@ -78,7 +78,7 @@ const pop =
 
 export function Features() {
   return (
-    <section aria-labelledby="features-title" className="py-16 sm:py-32">
+    <section aria-labelledby="features-title" className="relative py-16 sm:py-32">
       <Container>
         <h2
           id="features-title"

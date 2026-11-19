@@ -29,7 +29,7 @@ function tick(count: number) {
 }
 
 describe("Home hero", () => {
-  it("leads with the statement, decorative tiles, and the one-line description", () => {
+  it("leads with the headline, decorative tiles, and the one-line description", () => {
     render(
       <WaitlistSheetProvider>
         <Hero />
@@ -37,9 +37,11 @@ describe("Home hero", () => {
     );
     const heading = screen.getByRole("heading", { level: 1 });
 
-    expect(heading.textContent?.replace(/\s+/g, " ").trim()).toBe("ResAI is your restaurant’s AI agent");
+    expect(heading.textContent?.replace(/\s+/g, " ").trim()).toBe(
+      "Build, run, and grow your restaurant with agents.",
+    );
     // Three icon tiles, all hidden from screen readers.
-    const tiles = heading.querySelectorAll(':scope > span > span[aria-hidden="true"]');
+    const tiles = heading.querySelectorAll('span[aria-hidden="true"]');
     expect(tiles).toHaveLength(3);
     tiles.forEach((tile) => expect(tile.querySelector("svg")).not.toBeNull());
     // The setup's IntersectionObserver stub reports it in view right away.

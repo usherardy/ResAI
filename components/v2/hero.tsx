@@ -23,11 +23,11 @@ export function HeroB() {
           id="hero-b-title"
           className={cn(
             serif,
-            "mx-auto mt-7 max-w-4xl text-[3.5rem] leading-[0.95] tracking-[-0.02em] text-balance sm:text-[5.75rem] lg:text-[7.25rem]",
+            "mx-auto mt-7 max-w-5xl text-[3.1rem] leading-[0.98] tracking-[-0.02em] text-balance sm:text-[4.75rem] lg:text-[6.25rem]",
           )}
         >
-          Run your restaurant.{" "}
-          <em className="block text-brand-strong italic">Just ask.</em>
+          Build, run, and grow your restaurant{" "}
+          <em className="whitespace-nowrap text-brand-strong italic">with agents.</em>
         </h1>
 
         <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty text-foreground/75 sm:text-xl">

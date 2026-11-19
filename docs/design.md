@@ -64,9 +64,11 @@ delays. Keep new motion in CSS so it inherits this.
 - **Sheet** (`components/ui/sheet.tsx`): shadcn/Radix dialog used for the
   join page. Override size and motion through `className`; `cn` merges
   Tailwind classes, so later classes win.
-- **Hero headline** (`components/sections/hero.tsx`): centered "ResAI is
-  your restaurant's AI agent" on three fixed lines with rounded gradient icon
-  tiles (chef hat, receipt, chat; `PopTile` in `components/ui/pop-tile.tsx`).
+- **Hero headline** (`components/sections/hero.tsx`): centered "Build, run,
+  and grow your restaurant with agents." on fixed lines (three from 640px
+  wide, four on phones, where the first line splits after "run,") with
+  rounded gradient icon tiles (growth chart, chef hat, chat; `PopTile` in
+  `components/ui/pop-tile.tsx`).
   It first reads as a plain sentence. On load (`RevealOnView` in
   `components/ui/reveal-on-view.tsx`) each tile's slot widens so the words
   glide apart (900ms) and the tile pops in with a small overshoot and turn
