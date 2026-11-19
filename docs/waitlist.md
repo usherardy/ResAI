@@ -8,7 +8,7 @@ All of these open the same full-page form:
 
 | Where | What it is |
 | --- | --- |
-| Hero, after the One assistant demo, "Help shape ResAI" section, closing section | The black pill "Join the waitlist" with the orange knob (`WaitlistCta`) |
+| Hero, after the One assistant demo, closing section | The black pill "Join the waitlist" with the orange knob (`WaitlistCta`) |
 | Header | The "Join the waitlist" button |
 | Footer | The "Join the waitlist" link (`#join`) |
 | Any link to `#join` or `/#join` | Opens the page from anywhere on the site, e.g. in emails or ads |
@@ -105,6 +105,6 @@ deliberately dropped as spam/duplicate).
 | `components/waitlist/waitlist-form.tsx` | The questions, browser validation, submit, success screen |
 | `components/waitlist/waitlist-cta.tsx` | The pill button that opens the page |
 | `components/ui/sheet.tsx` | Dialog primitive (shadcn/Radix) the page is built on |
-| `lib/waitlist/perks.ts` | The four perks, shared with the "Help shape ResAI" section |
+| `lib/waitlist/perks.ts` | The four perks shown on the join page |
 | `lib/waitlist/schema.ts` | Validation rules and option lists, shared by browser and server |
 | `app/api/waitlist/route.ts` | The API endpoint |

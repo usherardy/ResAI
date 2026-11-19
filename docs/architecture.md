@@ -35,7 +35,7 @@ components/
     cards/                  One result card per scenario
   sections/               Hero (+ rotating-business word), features ("one sentence" boxes, played by
                           feature-video), how it works, demo (assistant tabs +
-                          join prompt), founder, vision, waitlist, FAQ, closing CTA
+                          join prompt), founder, vision, FAQ, closing CTA
   site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
@@ -59,7 +59,7 @@ docs/                     You are here
 
 Page order (`app/(site)/page.tsx`): Hero → Features ("One sentence instead of a dozen
 clicks" boxes) → How it works → Demo ("One assistant for the whole back office" tabs,
-then a join prompt) → Founder → Vision → Waitlist → FAQ → Closing CTA.
+then a join prompt) → Founder → Vision → FAQ → Closing CTA.
 
 ## Request path for a signup
 

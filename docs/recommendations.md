@@ -67,7 +67,7 @@ first. Each one says what to change and why. Done items are at the bottom.
     - "The POS in your pocket" (a future phone POS with tap-to-pay) is labelled
       "planned", but it can still make people wonder whether ResAI is an
       assistant or a POS.
-    - It now sits after the founder quote. Moving it below "Help shape ResAI", or
+    - It now sits after the founder quote. Moving it lower (after the FAQ), or
       trimming it, would keep the page about today's product.
 
 ## Accessibility and code health
@@ -93,3 +93,5 @@ first. Each one says what to change and why. Done items are at the bottom.
 - Reassurance under the hero buttons: "Free to join · Nothing changes without
   your OK."
 - The four example boxes swipe sideways on phones.
+- Removed the "Help shape ResAI" early-access section; the join page already
+  shows the same perks and questions.
