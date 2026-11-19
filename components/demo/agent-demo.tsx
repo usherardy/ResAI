@@ -193,7 +193,7 @@ export function AgentDemo() {
                     onClick={() => choose(id)}
                     aria-pressed={active}
                     className={cn(
-                      "group flex w-full items-center gap-2 rounded-full border px-3 py-1.5 text-left text-[13px] transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none lg:rounded-lg lg:border-transparent lg:px-2 lg:py-2",
+                      "group flex w-full items-center gap-2 rounded-full border px-3.5 py-2.5 text-left text-[13px] transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none lg:rounded-lg lg:border-transparent lg:px-2 lg:py-2",
                       active
                         ? "border-foreground/15 bg-card text-foreground shadow-xs lg:border-border"
                         : "border-border bg-card text-muted-foreground hover:text-foreground lg:bg-transparent lg:hover:bg-card/70",
@@ -378,7 +378,7 @@ export function AgentDemo() {
                 disabled={!draft.trim()}
                 aria-label="Send"
                 className={cn(
-                  "flex size-8 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+                  "flex size-9 shrink-0 items-center justify-center rounded-full transition-colors focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
                   draft.trim() || typing
                     ? "bg-foreground text-background"
                     : "bg-muted text-muted-foreground",

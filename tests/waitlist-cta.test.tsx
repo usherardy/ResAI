@@ -1,117 +1,74 @@
 // @vitest-environment jsdom
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
-import { WaitlistForm } from "@/components/waitlist/waitlist-form";
-import { WAITLIST_PREFILL_EVENT, type WaitlistPrefill } from "@/lib/waitlist/prefill";
+import { WaitlistSheetProvider } from "@/components/waitlist/waitlist-sheet";
 
-const push = vi.fn();
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push }) }));
-
-function listenForPrefill() {
-  const received: string[] = [];
-  const onPrefill = (event: Event) => {
-    event.preventDefault();
-    received.push((event as CustomEvent<WaitlistPrefill>).detail.email);
-  };
-  window.addEventListener(WAITLIST_PREFILL_EVENT, onPrefill);
-  return {
-    received,
-    stop: () => window.removeEventListener(WAITLIST_PREFILL_EVENT, onPrefill),
-  };
+function renderPill() {
+  return render(
+    <WaitlistSheetProvider>
+      <WaitlistCta />
+    </WaitlistSheetProvider>,
+  );
 }
 
-describe("WaitlistCta", () => {
-  it("opens into a focused email field when clicked", async () => {
+const pill = () => screen.getByRole("button", { name: /join the early-access waitlist/i });
+
+afterEach(() => {
+  window.history.replaceState(null, "", "/");
+});
+
+describe("WaitlistCta + waitlist panel", () => {
+  it("opens the panel with the questions when the pill is pressed", async () => {
     const user = userEvent.setup();
-    render(<WaitlistCta />);
+    renderPill();
 
-    const trigger = screen.getByRole("button", { name: /join the early-access waitlist/i });
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(pill()).toHaveAttribute("aria-haspopup", "dialog");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
-    await user.click(trigger);
+    await user.click(pill());
 
-    expect(trigger).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByLabelText(/email address/i)).toHaveFocus();
+    const dialog = await screen.findByRole("dialog", { name: /join the waitlist/i });
+    expect(dialog).toBeInTheDocument();
+    expect(screen.getByLabelText(/restaurant or company name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^phone/i)).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: /not working with your pos/i })).toBeInTheDocument();
+    expect(dialog).toContainElement(document.activeElement as HTMLElement);
   });
 
-  it("shows an error and doesn't hand off an invalid email", async () => {
-    const prefill = listenForPrefill();
+  it("closes on Escape and returns focus to the pill", async () => {
     const user = userEvent.setup();
-    render(<WaitlistCta />);
+    renderPill();
 
-    await user.click(screen.getByRole("button", { name: /join the early-access waitlist/i }));
-    await user.type(screen.getByLabelText(/email address/i), "not-an-email{Enter}");
-
-    expect(await screen.findByRole("alert")).toHaveTextContent(/enter a valid email address/i);
-    expect(screen.getByLabelText(/email address/i)).toHaveAttribute("aria-invalid", "true");
-    expect(prefill.received).toEqual([]);
-
-    await user.type(screen.getByLabelText(/email address/i), "x");
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
-    prefill.stop();
-  });
-
-  it("hands a normalized email to the waitlist form and resets", async () => {
-    const prefill = listenForPrefill();
-    const user = userEvent.setup();
-    render(<WaitlistCta />);
-
-    const trigger = screen.getByRole("button", { name: /join the early-access waitlist/i });
-    await user.click(trigger);
-    await user.type(screen.getByLabelText(/email address/i), "  Owner@CornerSlice.com ");
-    await user.click(screen.getByRole("button", { name: /continue/i }));
-
-    expect(prefill.received).toEqual(["owner@cornerslice.com"]);
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByLabelText(/email address/i)).toHaveValue("");
-    prefill.stop();
-  });
-
-  it("closes on Escape and returns focus to the button", async () => {
-    const user = userEvent.setup();
-    render(<WaitlistCta />);
-
-    const trigger = screen.getByRole("button", { name: /join the early-access waitlist/i });
-    await user.click(trigger);
+    await user.click(pill());
+    await screen.findByRole("dialog");
     await user.keyboard("{Escape}");
 
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    expect(trigger).toHaveFocus();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(pill()).toHaveFocus();
   });
 
-  it("falls back to the waitlist section when no form is on the page", async () => {
-    push.mockClear();
+  it("keeps what was typed after closing and reopening", async () => {
     const user = userEvent.setup();
-    render(<WaitlistCta />);
+    renderPill();
 
-    await user.click(screen.getByRole("button", { name: /join the early-access waitlist/i }));
-    await user.type(screen.getByLabelText(/email address/i), "owner@cornerslice.com{Enter}");
+    await user.click(pill());
+    await user.type(await screen.findByLabelText(/restaurant or company name/i), "Corner Slice");
+    await user.click(screen.getByRole("checkbox", { name: /fees are too high/i }));
+    await user.click(screen.getByRole("button", { name: /close/i }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
-    expect(push).toHaveBeenCalledWith("/#waitlist");
+    await user.click(pill());
+    expect(await screen.findByLabelText(/restaurant or company name/i)).toHaveValue("Corner Slice");
+    expect(screen.getByRole("checkbox", { name: /fees are too high/i })).toBeChecked();
   });
 
-  it("fills the full form and moves focus to the restaurant name", async () => {
-    const user = userEvent.setup();
-    render(
-      <>
-        <div data-testid="cta">
-          <WaitlistCta />
-        </div>
-        <div data-testid="form">
-          <WaitlistForm />
-        </div>
-      </>,
-    );
+  it("opens from a #join link and clears the hash", async () => {
+    window.history.replaceState(null, "", "/#join");
+    renderPill();
 
-    const cta = within(screen.getByTestId("cta"));
-    await user.click(cta.getByRole("button", { name: /join the early-access waitlist/i }));
-    await user.type(cta.getByLabelText(/email address/i), "owner@cornerslice.com{Enter}");
-
-    const form = within(screen.getByTestId("form"));
-    expect(form.getByLabelText(/^email/i)).toHaveValue("owner@cornerslice.com");
-    expect(form.getByLabelText(/restaurant or business name/i)).toHaveFocus();
-    expect(form.getByRole("status")).toHaveTextContent(/almost there/i);
+    expect(await screen.findByRole("dialog", { name: /join the waitlist/i })).toBeInTheDocument();
+    expect(window.location.hash).toBe("");
   });
 });

@@ -16,7 +16,8 @@ const { POST: optOutPOST } = await import("@/app/api/opt-out/route");
 const validBody = {
   email: "owner@cornerslice.com",
   businessName: "Corner Slice",
-  website: "",
+  phone: "415-555-0134",
+  honeypot: "",
   elapsedMs: 5_000,
 };
 

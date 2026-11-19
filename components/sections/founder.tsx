@@ -3,7 +3,7 @@ import { Container } from "@/components/site/section";
 
 export function FounderStory() {
   return (
-    <section aria-labelledby="founder-title" className="border-t border-border py-20 sm:py-32">
+    <section aria-labelledby="founder-title" className="border-t border-border py-16 sm:py-32">
       <Container>
         <div className="mx-auto max-w-5xl text-center">
           <h2
@@ -13,7 +13,7 @@ export function FounderStory() {
             Why we’re building this
           </h2>
           <figure className="mt-8">
-            <blockquote className="font-display text-[1.7rem] leading-[1.25] font-medium tracking-[-0.03em] text-balance sm:text-[2.25rem] lg:text-[2.7rem] lg:leading-[1.18]">
+            <blockquote className="font-display text-[1.45rem] leading-[1.28] font-medium tracking-[-0.03em] text-balance sm:text-[2.25rem] lg:text-[2.7rem] lg:leading-[1.18]">
               <p>
                 “After working in restaurant POS technical support, I saw how
                 much time restaurant owners lose to complicated settings and

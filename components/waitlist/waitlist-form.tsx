@@ -1,55 +1,49 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRightIcon, CheckIcon, CircleAlertIcon, LoaderCircleIcon } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
-import { WAITLIST_PREFILL_EVENT, type WaitlistPrefill } from "@/lib/waitlist/prefill";
 import {
   LIMITS,
   fieldErrorsFrom,
   locationCounts,
-  posSystems,
-  restaurantTypes,
+  posProblems,
   waitlistSchema,
 } from "@/lib/waitlist/schema";
 
 type Values = {
-  email: string;
   businessName: string;
-  name: string;
-  restaurantType: string;
-  currentPos: string;
+  email: string;
+  phone: string;
+  website: string;
   locations: string;
+  posProblems: string[];
   frustration: string;
-  researchConsent: boolean;
 };
 
 const emptyValues: Values = {
-  email: "",
   businessName: "",
-  name: "",
-  restaurantType: "",
-  currentPos: "",
+  email: "",
+  phone: "",
+  website: "",
   locations: "",
+  posProblems: [],
   frustration: "",
-  researchConsent: false,
 };
 
 /** Order used to move focus to the first invalid field. */
 const fieldOrder: (keyof Values)[] = [
-  "email",
   "businessName",
-  "name",
-  "restaurantType",
-  "currentPos",
+  "email",
+  "phone",
+  "website",
   "locations",
+  "posProblems",
   "frustration",
 ];
 
@@ -61,6 +55,46 @@ type ApiResponse = {
   error?: string;
   fieldErrors?: Record<string, string>;
 };
+
+/**
+ * Everything worth keeping while the form is closed: what they typed, whether
+ * they already joined, and when they started (for the server's bot timing
+ * check). The slide-in panel holds one of these so closing it by accident
+ * doesn't wipe the form.
+ */
+export type WaitlistDraft = {
+  values: Values;
+  setValues: React.Dispatch<React.SetStateAction<Values>>;
+  status: Status;
+  setStatus: React.Dispatch<React.SetStateAction<Status>>;
+  submittedEmail: string;
+  setSubmittedEmail: React.Dispatch<React.SetStateAction<string>>;
+  markStarted: () => void;
+  elapsedMs: () => number;
+};
+
+export function useWaitlistDraft(): WaitlistDraft {
+  const [values, setValues] = useState<Values>(emptyValues);
+  const [status, setStatus] = useState<Status>("idle");
+  const [submittedEmail, setSubmittedEmail] = useState("");
+  const startedAt = useRef(0);
+
+  const markStarted = useCallback(() => {
+    if (!startedAt.current) startedAt.current = Date.now();
+  }, []);
+  const elapsedMs = useCallback(() => Date.now() - startedAt.current, []);
+
+  return {
+    values,
+    setValues,
+    status,
+    setStatus,
+    submittedEmail,
+    setSubmittedEmail,
+    markStarted,
+    elapsedMs,
+  };
+}
 
 function readUtm() {
   try {
@@ -76,58 +110,36 @@ function readUtm() {
   }
 }
 
-export function WaitlistForm() {
+type WaitlistFormProps = {
+  /** Shared draft. Without one, the form keeps its own state. */
+  draft?: WaitlistDraft;
+  /** Shows a "Back to the site" button on the success screen. */
+  onDone?: () => void;
+  /** Rows rise in one after another when the form mounts (join page). */
+  animated?: boolean;
+};
+
+export function WaitlistForm({ draft, onDone, animated = false }: WaitlistFormProps) {
   const uid = useId();
   const id = (field: string) => `${uid}-${field}`;
 
-  const [values, setValues] = useState<Values>(emptyValues);
+  const ownDraft = useWaitlistDraft();
+  const { values, setValues, status, setStatus, submittedEmail, setSubmittedEmail, markStarted, elapsedMs } =
+    draft ?? ownDraft;
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
-  const [status, setStatus] = useState<Status>("idle");
   const [honeypot, setHoneypot] = useState("");
-  const [submittedEmail, setSubmittedEmail] = useState("");
-  const [prefilled, setPrefilled] = useState(false);
 
-  const startedAt = useRef<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
   const successRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    startedAt.current = Date.now();
-  }, []);
+    markStarted();
+  }, [markStarted]);
 
   useEffect(() => {
     if (status === "success") successRef.current?.focus();
-  }, [status]);
-
-  // An email entered in one of the page's quick CTAs (see waitlist-cta.tsx).
-  useEffect(() => {
-    const onPrefill = (event: Event) => {
-      event.preventDefault();
-      if (status === "success") {
-        successRef.current?.scrollIntoView({ block: "center" });
-        return;
-      }
-      const form = formRef.current;
-      if (!form) return;
-      if (status === "idle") {
-        const { email } = (event as CustomEvent<WaitlistPrefill>).detail;
-        setValues((v) => ({ ...v, email }));
-        setErrors((current) => {
-          const next = { ...current };
-          delete next.email;
-          return next;
-        });
-        setPrefilled(true);
-        // The email is done, so move on to the next required field.
-        form
-          .querySelector<HTMLInputElement>('[name="businessName"]')
-          ?.focus({ preventScroll: true });
-      }
-      form.scrollIntoView({ block: "start" });
-    };
-    window.addEventListener(WAITLIST_PREFILL_EVENT, onPrefill);
-    return () => window.removeEventListener(WAITLIST_PREFILL_EVENT, onPrefill);
   }, [status]);
 
   const set = <K extends keyof Values>(field: K, value: Values[K]) => {
@@ -139,6 +151,13 @@ export function WaitlistForm() {
         return next;
       });
     }
+  };
+
+  const toggleProblem = (value: string, checked: boolean) => {
+    const next = checked
+      ? [...values.posProblems, value]
+      : values.posProblems.filter((v) => v !== value);
+    set("posProblems", next);
   };
 
   const focusFirstError = (fieldErrors: Record<string, string>) => {
@@ -183,8 +202,8 @@ export function WaitlistForm() {
         body: JSON.stringify({
           ...values,
           ...readUtm(),
-          website: honeypot,
-          elapsedMs: Date.now() - startedAt.current,
+          honeypot,
+          elapsedMs: elapsedMs(),
         }),
       });
       const data = (await response.json().catch(() => ({}))) as ApiResponse;
@@ -219,9 +238,8 @@ export function WaitlistForm() {
   }
 
   if (status === "success") {
-    const firstName = values.name.trim().split(/\s+/)[0];
     return (
-      <div className="flex min-h-[28rem] flex-col justify-center py-6" role="status">
+      <div className="flex flex-col py-6" role="status">
         <span className="flex size-10 items-center justify-center rounded-full bg-success text-white">
           <CheckIcon className="size-5" strokeWidth={3} aria-hidden="true" />
         </span>
@@ -230,16 +248,13 @@ export function WaitlistForm() {
           tabIndex={-1}
           className="mt-5 text-2xl font-semibold tracking-tight outline-none"
         >
-          You&apos;re on the list{firstName ? `, ${firstName}` : ""}.
+          You&apos;re on the list.
         </h3>
         <p className="mt-3 max-w-md text-muted-foreground">
           We&apos;ll email{" "}
           <span className="font-medium text-foreground">{submittedEmail}</span>{" "}
-          as early access opens up
-          {values.researchConsent
-            ? ". Since you said you're open to it, we may also reach out about a short research call."
-            : "."}{" "}
-          No spam, and we won&apos;t sell your information.
+          as early access opens up. No spam, and we won&apos;t sell your
+          information.
         </p>
         <p className="mt-6 text-sm text-muted-foreground">
           Changed your mind?{" "}
@@ -248,6 +263,15 @@ export function WaitlistForm() {
           </Link>
           .
         </p>
+        {onDone ? (
+          <button
+            type="button"
+            onClick={onDone}
+            className="mt-8 inline-flex h-11 w-fit items-center justify-center rounded-full border border-foreground/80 px-5 text-[15px] font-medium transition-colors hover:bg-foreground/5 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            Back to the site
+          </button>
+        ) : null}
       </div>
     );
   }
@@ -262,180 +286,199 @@ export function WaitlistForm() {
       ref={formRef}
       noValidate
       onSubmit={onSubmit}
-      aria-describedby={`${id("privacy")}`}
+      aria-describedby={id("privacy")}
       aria-busy={submitting}
-      className="space-y-5"
+      className={cn(
+        "grid gap-x-4 gap-y-5 sm:grid-cols-2",
+        animated && "stagger-rise [--stagger-delay:380ms] [--stagger-step:45ms]",
+      )}
     >
-      {prefilled ? (
-        <p
-          role="status"
-          className="flex animate-fade-up items-center gap-2.5 rounded-lg bg-brand-soft px-3.5 py-3 text-sm leading-snug text-foreground"
-        >
-          <span className="size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />
-          Almost there. Add your restaurant&apos;s name to finish joining.
-        </p>
-      ) : null}
-
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field id={id("email")} label="Email" required error={errors.email} className="sm:col-span-2">
-          <Input
-            id={id("email")}
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            autoCapitalize="none"
-            spellCheck={false}
-            placeholder="you@yourrestaurant.com"
-            required
-            aria-required="true"
-            aria-invalid={Boolean(errors.email)}
-            aria-describedby={describedBy("email")}
-            maxLength={LIMITS.email}
-            value={values.email}
-            onChange={(e) => set("email", e.target.value)}
-            onBlur={() => values.email && validateField("email")}
-            className="h-10 bg-card"
-          />
-        </Field>
-
-        <Field id={id("businessName")} label="Restaurant or business name" required error={errors.businessName}>
-          <Input
-            id={id("businessName")}
-            name="businessName"
-            autoComplete="organization"
-            placeholder="Corner Slice"
-            required
-            aria-required="true"
-            aria-invalid={Boolean(errors.businessName)}
-            aria-describedby={describedBy("businessName")}
-            maxLength={LIMITS.businessName}
-            value={values.businessName}
-            onChange={(e) => set("businessName", e.target.value)}
-            onBlur={() => values.businessName && validateField("businessName")}
-            className="h-10 bg-card"
-          />
-        </Field>
-
-        <Field id={id("name")} label="Your name" error={errors.name}>
-          <Input
-            id={id("name")}
-            name="name"
-            autoComplete="name"
-            placeholder="Jordan Lee"
-            aria-invalid={Boolean(errors.name)}
-            aria-describedby={describedBy("name")}
-            maxLength={LIMITS.name}
-            value={values.name}
-            onChange={(e) => set("name", e.target.value)}
-            className="h-10 bg-card"
-          />
-        </Field>
-
-        <Field id={id("restaurantType")} label="Type of business" error={errors.restaurantType}>
-          <NativeSelect
-            id={id("restaurantType")}
-            name="restaurantType"
-            aria-invalid={Boolean(errors.restaurantType)}
-            aria-describedby={describedBy("restaurantType")}
-            value={values.restaurantType}
-            onChange={(e) => set("restaurantType", e.target.value)}
-          >
-            <option value="">Select…</option>
-            {restaurantTypes.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </NativeSelect>
-        </Field>
-
-        <Field id={id("currentPos")} label="Current POS" error={errors.currentPos}>
-          <NativeSelect
-            id={id("currentPos")}
-            name="currentPos"
-            aria-invalid={Boolean(errors.currentPos)}
-            aria-describedby={describedBy("currentPos")}
-            value={values.currentPos}
-            onChange={(e) => set("currentPos", e.target.value)}
-          >
-            <option value="">Select…</option>
-            {posSystems.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </NativeSelect>
-        </Field>
-
-        <Field id={id("locations")} label="Number of locations" error={errors.locations} className="sm:col-span-2">
-          <NativeSelect
-            id={id("locations")}
-            name="locations"
-            aria-invalid={Boolean(errors.locations)}
-            aria-describedby={describedBy("locations")}
-            value={values.locations}
-            onChange={(e) => set("locations", e.target.value)}
-          >
-            <option value="">Select…</option>
-            {locationCounts.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </NativeSelect>
-        </Field>
-
-        <Field
-          id={id("frustration")}
-          label="What’s your biggest POS frustration?"
-          error={errors.frustration}
-          className="sm:col-span-2"
-        >
-          <Textarea
-            id={id("frustration")}
-            name="frustration"
-            rows={3}
-            placeholder="Changing a modifier takes 10 clicks. The printer drops off every Friday night…"
-            aria-invalid={Boolean(errors.frustration)}
-            aria-describedby={describedBy("frustration", `${id("frustration")}-count`)}
-            maxLength={LIMITS.frustration}
-            value={values.frustration}
-            onChange={(e) => set("frustration", e.target.value)}
-            className="min-h-24 bg-card"
-          />
-          <p
-            id={`${id("frustration")}-count`}
-            className="mt-1.5 text-right text-xs text-muted-foreground tabular"
-          >
-            {values.frustration.length}/{LIMITS.frustration}
-          </p>
-        </Field>
-      </div>
-
-      <div className="flex items-start gap-3 rounded-lg border border-border bg-surface/60 p-3.5">
-        <Checkbox
-          id={id("researchConsent")}
-          checked={values.researchConsent}
-          onCheckedChange={(checked) => set("researchConsent", checked === true)}
-          className="mt-0.5 bg-card"
+      <Field
+        id={id("businessName")}
+        label="Restaurant or company name"
+        required
+        error={errors.businessName}
+        className="sm:col-span-2"
+      >
+        <Input
+          id={id("businessName")}
+          name="businessName"
+          autoComplete="organization"
+          placeholder="Corner Slice"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.businessName)}
+          aria-describedby={describedBy("businessName")}
+          maxLength={LIMITS.businessName}
+          value={values.businessName}
+          onChange={(e) => set("businessName", e.target.value)}
+          onBlur={() => values.businessName && validateField("businessName")}
+          className="h-11 bg-card"
         />
-        <Label
-          htmlFor={id("researchConsent")}
-          className="block text-sm leading-snug font-normal text-foreground"
+      </Field>
+
+      <Field id={id("email")} label="Email" required error={errors.email}>
+        <Input
+          id={id("email")}
+          name="email"
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          autoCapitalize="none"
+          spellCheck={false}
+          placeholder="you@yourrestaurant.com"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.email)}
+          aria-describedby={describedBy("email")}
+          maxLength={LIMITS.email}
+          value={values.email}
+          onChange={(e) => set("email", e.target.value)}
+          onBlur={() => values.email && validateField("email")}
+          className="h-11 bg-card"
+        />
+      </Field>
+
+      <Field
+        id={id("phone")}
+        label="Phone"
+        required
+        error={errors.phone}
+        hint="Only used to reach you about early access."
+      >
+        <Input
+          id={id("phone")}
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="(415) 555-0134"
+          required
+          aria-required="true"
+          aria-invalid={Boolean(errors.phone)}
+          aria-describedby={describedBy("phone", `${id("phone")}-hint`)}
+          maxLength={LIMITS.phone}
+          value={values.phone}
+          onChange={(e) => set("phone", e.target.value)}
+          onBlur={() => values.phone && validateField("phone")}
+          className="h-11 bg-card"
+        />
+      </Field>
+
+      <Field id={id("website")} label="Website" error={errors.website}>
+        <Input
+          id={id("website")}
+          name="website"
+          type="text"
+          inputMode="url"
+          autoComplete="url"
+          autoCapitalize="none"
+          spellCheck={false}
+          placeholder="cornerslice.com"
+          aria-invalid={Boolean(errors.website)}
+          aria-describedby={describedBy("website")}
+          maxLength={LIMITS.website}
+          value={values.website}
+          onChange={(e) => set("website", e.target.value)}
+          onBlur={() => values.website && validateField("website")}
+          className="h-11 bg-card"
+        />
+      </Field>
+
+      <ChoiceGroup legend="How many locations?" error={errors.locations} errorId={`${id("locations")}-error`}>
+        <div className="grid grid-cols-4 gap-1 rounded-full bg-surface p-1">
+          {locationCounts.map((option, index) => (
+            <label
+              key={option.value}
+              className="relative flex h-9 cursor-pointer items-center justify-center rounded-full text-sm font-medium text-foreground/80 transition-colors hover:text-foreground has-checked:bg-foreground has-checked:text-background has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50"
+            >
+              <input
+                id={index === 0 ? id("locations") : undefined}
+                type="radio"
+                name="locations"
+                value={option.value}
+                checked={values.locations === option.value}
+                onChange={() => set("locations", option.value)}
+                onClick={() => {
+                  // Tapping the selected option again clears it (it's optional).
+                  if (values.locations === option.value) set("locations", "");
+                }}
+                aria-describedby={describedBy("locations")}
+                className="sr-only"
+              />
+              {option.label}
+            </label>
+          ))}
+        </div>
+      </ChoiceGroup>
+
+      <ChoiceGroup
+        legend="What’s not working with your POS?"
+        hint="Pick any that apply."
+        error={errors.posProblems}
+        errorId={`${id("posProblems")}-error`}
+        className="sm:col-span-2"
+      >
+        <div className="flex flex-wrap gap-2">
+          {posProblems.map((option, index) => {
+            const checked = values.posProblems.includes(option.value);
+            return (
+              <label
+                key={option.value}
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border bg-card px-3.5 py-2 text-sm leading-tight text-foreground/85 transition-colors select-none hover:border-foreground/30 hover:text-foreground has-checked:border-brand has-checked:bg-brand-soft has-checked:text-foreground has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50"
+              >
+                <input
+                  id={index === 0 ? id("posProblems") : undefined}
+                  type="checkbox"
+                  name="posProblems"
+                  value={option.value}
+                  checked={checked}
+                  onChange={(e) => toggleProblem(option.value, e.target.checked)}
+                  aria-describedby={describedBy("posProblems")}
+                  className="sr-only"
+                />
+                {checked ? (
+                  <CheckIcon className="-ms-0.5 size-3.5 text-brand-strong" strokeWidth={3} aria-hidden="true" />
+                ) : null}
+                {option.label}
+              </label>
+            );
+          })}
+        </div>
+      </ChoiceGroup>
+
+      <Field
+        id={id("frustration")}
+        label="Anything else?"
+        error={errors.frustration}
+        className="sm:col-span-2"
+      >
+        <Textarea
+          id={id("frustration")}
+          name="frustration"
+          rows={3}
+          placeholder="Changing a modifier takes 10 clicks. The printer drops off every Friday night…"
+          aria-invalid={Boolean(errors.frustration)}
+          aria-describedby={describedBy("frustration", `${id("frustration")}-count`)}
+          maxLength={LIMITS.frustration}
+          value={values.frustration}
+          onChange={(e) => set("frustration", e.target.value)}
+          className="min-h-24 bg-card"
+        />
+        <p
+          id={`${id("frustration")}-count`}
+          className="mt-1.5 text-right text-xs text-muted-foreground tabular"
         >
-          I&apos;m open to a short research call (about 20–30 minutes) about how
-          I run my restaurant.{" "}
-          <span className="text-muted-foreground">Optional.</span>
-        </Label>
-      </div>
+          {values.frustration.length}/{LIMITS.frustration}
+        </p>
+      </Field>
 
       {/* Honeypot: hidden from people and assistive tech. Bots tend to fill it. */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor={id("website")}>Leave this field empty</label>
+        <label htmlFor={id("url")}>Leave this field empty</label>
         <input
-          id={id("website")}
-          name="website"
+          id={id("url")}
+          name="url"
           type="text"
           tabIndex={-1}
           autoComplete="off"
@@ -444,19 +487,21 @@ export function WaitlistForm() {
         />
       </div>
 
-      <div aria-live="assertive" aria-atomic="true">
-        {formError ? (
-          <p
-            role="alert"
-            className="flex items-start gap-2 rounded-lg border border-destructive/25 bg-destructive/5 p-3 text-sm text-destructive"
-          >
-            <CircleAlertIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            {formError}
-          </p>
-        ) : null}
-      </div>
-
-      <div className="space-y-3">
+      {/* Stays in view at the bottom of the panel while the questions scroll,
+          so the button and any submit error are always visible. The fade
+          above it keeps scrolled content from being cut off hard. */}
+      <div className="sticky bottom-0 -mx-1 space-y-3 bg-background px-1 pt-2 pb-1 sm:col-span-2 before:pointer-events-none before:absolute before:inset-x-0 before:-top-6 before:h-6 before:bg-linear-to-t before:from-background before:to-transparent">
+        <div aria-live="assertive" aria-atomic="true">
+          {formError ? (
+            <p
+              role="alert"
+              className="flex items-start gap-2 rounded-lg border border-destructive/25 bg-destructive/5 p-3 text-sm text-destructive"
+            >
+              <CircleAlertIcon className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+              {formError}
+            </p>
+          ) : null}
+        </div>
         <button
           type="submit"
           disabled={submitting}
@@ -469,7 +514,7 @@ export function WaitlistForm() {
             </>
           ) : (
             <>
-              Join the early-access waitlist
+              Join the waitlist
               <ArrowRightIcon
                 className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
@@ -477,22 +522,33 @@ export function WaitlistForm() {
             </>
           )}
         </button>
-        <p id={id("privacy")} className="text-xs leading-relaxed text-muted-foreground">
-          We&apos;ll use your details to contact you about ResAI early access
-          and, if you check the box above, a research call. We won&apos;t sell
-          your information. You can{" "}
-          <Link href="/opt-out" className="underline underline-offset-2 hover:text-foreground">
-            opt out
-          </Link>{" "}
-          anytime. See our{" "}
-          <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
-            Privacy Policy
-          </Link>
-          .
-        </p>
       </div>
+      <p id={id("privacy")} className="text-xs leading-relaxed text-muted-foreground sm:col-span-2">
+        We&apos;ll use your details to contact you by email or phone about
+        ResAI early access. We won&apos;t sell your information. You can{" "}
+        <Link href="/opt-out" className="underline underline-offset-2 hover:text-foreground">
+          opt out
+        </Link>{" "}
+        anytime. See our{" "}
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground">
+          Privacy Policy
+        </Link>
+        .
+      </p>
     </form>
   );
+}
+
+function RequiredMark({ required }: { required?: boolean }) {
+  return required ? (
+    <>
+      <span className="text-brand-strong" aria-hidden="true">
+        {" "}
+        *
+      </span>
+      <span className="sr-only"> (required)</span>
+    </>
+  ) : null;
 }
 
 function Field({
@@ -500,6 +556,7 @@ function Field({
   label,
   required,
   error,
+  hint,
   className,
   children,
 }: {
@@ -507,6 +564,7 @@ function Field({
   label: string;
   required?: boolean;
   error?: string;
+  hint?: string;
   className?: string;
   children: React.ReactNode;
 }) {
@@ -515,25 +573,56 @@ function Field({
       <Label htmlFor={id} className="flex items-baseline justify-between gap-2">
         <span>
           {label}
-          {required ? (
-            <span className="text-brand-strong" aria-hidden="true">
-              {" "}
-              *
-            </span>
-          ) : null}
+          <RequiredMark required={required} />
         </span>
-        {required ? (
-          <span className="sr-only">(required)</span>
-        ) : (
+        {required ? null : (
           <span className="text-xs font-normal text-muted-foreground">Optional</span>
         )}
       </Label>
       {children}
+      {hint && !error ? (
+        <p id={`${id}-hint`} className="text-[13px] text-muted-foreground">
+          {hint}
+        </p>
+      ) : null}
       {error ? (
         <p id={`${id}-error`} className="text-[13px] text-destructive">
           {error}
         </p>
       ) : null}
     </div>
+  );
+}
+
+/** A fieldset for radio/checkbox pills. Always optional in this form. */
+function ChoiceGroup({
+  legend,
+  hint,
+  error,
+  errorId,
+  className,
+  children,
+}: {
+  legend: string;
+  hint?: string;
+  error?: string;
+  errorId: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <fieldset className={cn("min-w-0 space-y-2.5", className)}>
+      <legend className="flex w-full items-baseline justify-between gap-2 text-sm leading-snug font-medium">
+        <span>{legend}</span>
+        <span className="text-xs font-normal text-muted-foreground">Optional</span>
+      </legend>
+      {hint ? <p className="-mt-1 text-[13px] text-muted-foreground">{hint}</p> : null}
+      {children}
+      {error ? (
+        <p id={errorId} className="text-[13px] text-destructive">
+          {error}
+        </p>
+      ) : null}
+    </fieldset>
   );
 }

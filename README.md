@@ -39,7 +39,8 @@ components/
                           (live demo + feature cards), vision, founder, waitlist,
                           FAQ, closing CTA
   site/                   Header, footer, logo, layout helpers
-  waitlist/               Waitlist form, quick email button, opt-out form (client)
+  waitlist/               Full-page waitlist (slides in from the right) + form,
+                          the pill that opens it, opt-out form (client)
   ui/                     shadcn/ui primitives, a styled native <select>, and
                           Magic UI effects (marquee in use; shimmer button, shiny
                           text, border beam, shine border, spotlight card available)
@@ -93,12 +94,21 @@ without them, but it doesn't collect signups.
 
 ## Database setup (Supabase)
 
-The migration is `supabase/migrations/20261118000000_waitlist.sql`. It
-creates:
+There are two migrations. Apply them in order:
+
+1. `supabase/migrations/20261118000000_waitlist.sql`: tables, RLS, functions, grants.
+2. `supabase/migrations/20261119000000_waitlist_contact_fields.sql`: adds
+   `phone`, `website` and `pos_problems` to `waitlist_leads` for the
+   slide-in form.
+
+Together they create:
 
 - `waitlist_leads`: one row per email (unique, stored lowercase), with
   CHECK constraints that mirror the zod schema, plus the privacy-notice
-  version and UTM tags.
+  version and UTM tags. Phone is stored as `+1XXXXXXXXXX`, website with a
+  scheme, and POS problems as a `text[]` of the ids in
+  `lib/waitlist/schema.ts`. `contact_name`, `restaurant_type`, `current_pos`
+  and `research_consent` are no longer asked for; they stay for older rows.
 - `outreach_opt_outs`: emails that asked not to be contacted.
 - `rate_limit_events`: hashed rate-limit keys only.
 - `consume_rate_limit(bucket, limit, window_seconds)` and
@@ -118,10 +128,10 @@ npx supabase login
 npx supabase link --project-ref <your-project-ref>
 npx supabase db push
 
-# Option B: paste the SQL file into Dashboard → SQL Editor → Run
+# Option B: paste each SQL file, in order, into Dashboard → SQL Editor → Run
 ```
 
-The migration is safe to re-run.
+Both migrations are safe to re-run.
 
 Optional nightly cleanup of old rate-limit rows (enable the `pg_cron`
 extension first). The rate-limit function already prunes on each call, so
@@ -165,9 +175,10 @@ order by l.created_at desc;
 
 ## Tests
 
-`npm test` runs 75 tests:
+`npm test` runs 98 tests:
 
-- `schema.test.ts`: normalization, required fields, limits, enums, link spam.
+- `schema.test.ts`: normalization, required fields, US phone formats,
+  website normalization, POS problem chips, limits, enums, link spam.
 - `service.test.ts`: success, duplicate, validation, honeypot, timing,
   not-configured (503), rate-limited (429), insert failure (500), hashed keys,
   opt-out.
@@ -176,19 +187,21 @@ order by l.created_at desc;
 - `security.test.ts`: IP parsing, hashing, origin checks, memory limiter,
   fail-open chaining.
 - `demo-logic.test.ts`: prompt routing and price math.
-- `waitlist-form.test.tsx`: client validation and focus, loading, success,
-  400/429/503 handling, network failure.
+- `waitlist-form.test.tsx`: client validation and focus, phone errors, the
+  full payload (chips, locations, website), toggling chips and locations,
+  loading, success, 400/429/503 handling, network failure.
 - `agent-demo.test.tsx`: labeling, autoplay, scenario selection, approval
   copy, rounding toggle, free-text fallback.
-- `waitlist-cta.test.tsx`: the quick email button opens, validates, hands
-  the email to the full form, closes on Escape, and falls back without a form.
+- `waitlist-cta.test.tsx`: the pill opens the full-page form, focus moves in
+  and returns on Escape, the draft survives close and reopen, and `#join`
+  opens it.
 - `showcase.test.tsx`: the scrolling tiles are inert and hidden from screen
   readers, and the pause control works.
 
 ## Before launch
 
 - [ ] Set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_CONTACT_EMAIL` to real values.
-- [ ] Create the Supabase project, apply the migration, and set server env vars.
+- [ ] Create the Supabase project, apply both migrations, and set server env vars.
 - [ ] Submit a real signup in production and confirm the row in Supabase.
 - [ ] Have counsel review `/privacy` and `/terms` (add entity name and governing law).
 - [ ] Optionally add the founder's name to `components/sections/founder.tsx`.

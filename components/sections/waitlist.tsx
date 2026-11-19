@@ -1,24 +1,12 @@
 import { CheckIcon } from "lucide-react";
 import { Container, Eyebrow } from "@/components/site/section";
-import { WaitlistForm } from "@/components/waitlist/waitlist-form";
+import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
+import { waitlistPerks } from "@/lib/waitlist/perks";
 
-const perks = [
-  {
-    title: "Talk with the founder",
-    body: "If you’re up for it, a short call about how your restaurant runs and where your POS gets in the way.",
-  },
-  {
-    title: "Try it early",
-    body: "We’ll invite owners in small groups as early versions are ready to test.",
-  },
-  {
-    title: "Steer what we build first",
-    body: "Your answers about your POS and your frustrations set our priorities.",
-  },
-  {
-    title: "Free, no commitment",
-    body: "Joining costs nothing, and you can opt out anytime.",
-  },
+const joinSteps = [
+  "Your restaurant name and number of locations",
+  "Email and phone, so we can reach you",
+  "The POS problems that slow you down",
 ];
 
 export function Waitlist() {
@@ -26,7 +14,7 @@ export function Waitlist() {
     <section
       id="waitlist"
       aria-labelledby="waitlist-title"
-      className="scroll-mt-16 pb-20 sm:pb-28"
+      className="scroll-mt-16 pb-16 sm:pb-28"
     >
       <Container>
         <div className="grid gap-10 rounded-[2rem] bg-surface p-5 sm:p-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16 lg:p-14">
@@ -44,7 +32,7 @@ export function Waitlist() {
             </p>
 
             <ul className="mt-10 border-t border-foreground/10">
-              {perks.map((perk) => (
+              {waitlistPerks.map((perk) => (
                 <li key={perk.title} className="flex gap-4 border-b border-foreground/10 py-4">
                   <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
                     <CheckIcon className="size-3.5" strokeWidth={3} aria-hidden="true" />
@@ -60,8 +48,25 @@ export function Waitlist() {
             </ul>
           </div>
 
-          <div className="rounded-2xl bg-card p-5 shadow-[0_24px_48px_-28px_oklch(0_0_0/0.2)] sm:p-8">
-            <WaitlistForm />
+          <div className="flex flex-col justify-center rounded-2xl bg-card p-6 shadow-[0_24px_48px_-28px_oklch(0_0_0/0.2)] sm:p-10 lg:self-center">
+            <p className="font-mono text-[11px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+              Takes about a minute
+            </p>
+            <p className="mt-3 text-xl leading-snug font-medium tracking-tight text-balance sm:text-2xl">
+              Tell us about your restaurant, how to reach you, and what&apos;s
+              not working with your POS.
+            </p>
+            <ol className="mt-6 space-y-2.5 text-[15px] text-muted-foreground">
+              {joinSteps.map((step, index) => (
+                <li key={step} className="flex items-center gap-3">
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-surface text-xs font-medium text-foreground tabular">
+                    {index + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+            <WaitlistCta className="mt-8 sm:w-full" />
           </div>
         </div>
       </Container>

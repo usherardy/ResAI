@@ -13,9 +13,10 @@ import {
 const human = {
   email: "Owner@CornerSlice.com",
   businessName: "Corner Slice",
-  currentPos: "toast",
-  researchConsent: true,
-  website: "",
+  phone: "(415) 555-0134",
+  website: "cornerslice.com",
+  posProblems: ["hardware", "fees"],
+  honeypot: "",
   elapsedMs: 9_000,
 };
 
@@ -49,9 +50,11 @@ describe("submitWaitlist", () => {
     expect(stored[0]).toMatchObject({
       email: "owner@cornerslice.com",
       business_name: "Corner Slice",
-      current_pos: "toast",
-      research_consent: true,
-      contact_name: null,
+      phone: "+14155550134",
+      website: "https://cornerslice.com",
+      location_count: null,
+      pos_problems: ["hardware", "fees"],
+      pos_frustration: null,
       source: "landing_page",
       privacy_notice_version: PRIVACY_NOTICE_VERSION,
     });
@@ -68,23 +71,36 @@ describe("submitWaitlist", () => {
 
   it("returns field errors for invalid input", async () => {
     const { deps, repository } = makeDeps();
-    const result = await submitWaitlist({ ...human, email: "nope", businessName: "" }, ctx, deps);
+    const result = await submitWaitlist(
+      { ...human, email: "nope", businessName: "", phone: "123" },
+      ctx,
+      deps,
+    );
 
     expect(result.status).toBe(400);
     expect(result.body).toMatchObject({ ok: false, error: "validation" });
     expect(result.body.ok === false && result.body.fieldErrors).toMatchObject({
       email: expect.any(String),
       businessName: expect.any(String),
+      phone: expect.any(String),
     });
     expect(repository.insertLead).not.toHaveBeenCalled();
   });
 
   it("silently drops honeypot submissions with a fake success", async () => {
     const { deps, repository } = makeDeps();
-    const result = await submitWaitlist({ ...human, website: "http://spam.example" }, ctx, deps);
+    const result = await submitWaitlist({ ...human, honeypot: "http://spam.example" }, ctx, deps);
 
     expect(result.status).toBe(200);
     expect(repository.insertLead).not.toHaveBeenCalled();
+  });
+
+  it("stores signups that fill in the real website field", async () => {
+    const { deps, stored } = makeDeps();
+    const result = await submitWaitlist({ ...human, website: "https://cornerslice.com" }, ctx, deps);
+
+    expect(result.status).toBe(200);
+    expect(stored).toHaveLength(1);
   });
 
   it("silently drops submissions that are too fast or missing timing", async () => {
@@ -158,7 +174,7 @@ describe("submitOptOut", () => {
 
   it("ignores honeypot submissions", async () => {
     const { deps, optOuts } = makeDeps();
-    const result = await submitOptOut({ email: "a@b.co", website: "x" }, ctx, deps);
+    const result = await submitOptOut({ email: "a@b.co", honeypot: "x" }, ctx, deps);
     expect(result.status).toBe(200);
     expect(optOuts).toHaveLength(0);
   });
