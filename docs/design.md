@@ -125,7 +125,7 @@ delays. Keep new motion in CSS so it inherits this.
 - **One assistant tabs** (`components/sections/demo.tsx` +
   `assistant-tabs.tsx`, `#demo`): "One assistant for the *whole back
   office.*" on a surface panel, with Menus / Prices / Sales / Fixes tabs
-  (from `/v2`). Each tab plays like a video: the request types out as a big
+  Each tab plays like a video: the request types out as a big
   quote, a "ResAI is working…" panel ticks through the scenario's three
   steps (placeholder bars → spinner → check), and a loading placeholder
   gives way to the result card and reply. The first tab plays when the
@@ -134,7 +134,7 @@ delays. Keep new motion in CSS so it inherits this.
   `AgentDemo` is no longer on the page.) The panel ends with a join prompt,
   "Want this for your restaurant?", plus the waitlist pill, so there's a
   join button right after the visitor has seen a result.
-- **Magic UI effects** in `components/ui/` (marquee in use on `/v2`; shimmer button,
+- **Magic UI effects** in `components/ui/` (marquee, shimmer button,
   shiny text, border beam, shine border and spotlight card available) are
   adapted from [Magic UI](https://magicui.design) (MIT), rewritten to use CSS
   animation only.
