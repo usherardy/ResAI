@@ -14,7 +14,7 @@ Defined in `app/globals.css` (`:root`) and used as Tailwind colors
 | `background` | `oklch(0.975 0.004 95)` | Warm off-white page canvas |
 | `foreground` | `oklch(0.145 0.003 60)` | Body text, black buttons |
 | `card` | white | Cards and inputs on the canvas |
-| `surface` | `oklch(0.945 0.012 70)` | Warm tinted panels (e.g. "Help shape ResAI", segmented controls) |
+| `surface` | `oklch(0.945 0.012 70)` | Warm tinted panels (e.g. the One assistant demo, segmented controls) |
 | `ink` | `oklch(0.13 0.004 60)` | Near-black full-bleed sections (footer), dialog backdrop |
 | `muted-foreground` | `oklch(0.47 0.01 60)` | Secondary text (about 5.4:1 on the canvas, passes AA) |
 | `brand` | `oklch(0.64 0.19 38)` | The single ember/tomato accent: pill knob, dots, focus ring, chip borders |
@@ -34,7 +34,7 @@ closing section and the join page. `bg-dot-grid` adds a faint dot texture.
   - Hero: 76 / 36px.
   - Main section headlines: 56 / 30px ("One sentence…", "Ask. Review.
     Approve.", "One assistant…", closing).
-  - Smaller section headlines: 40 / 26px (Vision, Help shape ResAI, FAQ).
+  - Smaller section headlines: 40 / 26px (Vision, FAQ).
   - Card titles: 26–28 / 22–24px.
   - Founder quote: 36 / 21px.
   - Body text: 15–18px.
