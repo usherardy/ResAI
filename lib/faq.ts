@@ -16,7 +16,7 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: "Who is it for?",
     answer:
-      "Independent restaurants, cafés, and bars in the US, especially owner-operators and managers who don’t have an IT person and would rather not spend their evenings in a back-office dashboard.",
+      "Independent restaurants, cafés, bars, bakeries, and food trucks in the US, especially owner-operators and managers who don’t have an IT person and would rather not spend their evenings in a back-office dashboard.",
   },
   {
     question: "Will it work with my current POS?",

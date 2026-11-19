@@ -150,7 +150,7 @@ export function AssistantTabs() {
           <p className="sr-only">{scenario.prompt}</p>
           <p
             aria-hidden="true"
-            className="mt-4 grid font-display text-[1.75rem] leading-[1.15] font-semibold tracking-[-0.035em] sm:text-[2.25rem]"
+            className="mt-4 grid font-display text-[1.5rem] leading-[1.18] font-semibold tracking-[-0.03em] sm:text-[1.875rem]"
           >
             {/* The invisible full text holds the size while it types. Plain
                 (unbalanced) wrapping, so the typed text breaks where the

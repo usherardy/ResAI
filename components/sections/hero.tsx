@@ -1,4 +1,5 @@
-import { ChefHatIcon, MessagesSquareIcon, TrendingUpIcon } from "lucide-react";
+import { MessagesSquareIcon, TrendingUpIcon } from "lucide-react";
+import { RotatingBusiness } from "@/components/sections/rotating-business";
 import { Container } from "@/components/site/section";
 import { PopTile } from "@/components/ui/pop-tile";
 import { RevealOnView } from "@/components/ui/reveal-on-view";
@@ -18,20 +19,22 @@ export function Hero() {
         />
         <Container className="py-14 text-center sm:py-24">
           {/* Fixed lines: three from tablet width up, four on phones (the
-              first line splits after "run,"), so the headline stays big. It
+              first line splits after "fix,"), so the headline stays big. It
               first reads as a plain sentence; on load each tile's slot widens
               (the words glide apart) and the tile pops in, one line after
-              another, then bobs gently. The font scales with the screen so
-              each line fits on one row. The {" "} between lines keeps it a
-              proper sentence for screen readers. */}
+              another, then bobs gently. Then "restaurant" keeps rotating
+              through café, bar, bakery and food truck (RotatingBusiness). The
+              font scales with the screen so each line fits on one row. The
+              {" "} between lines keeps it a proper sentence for screen
+              readers. */}
           <RevealOnView
             as="h1"
             id="hero-title"
             threshold={0.3}
-            className="group mx-auto font-display text-[clamp(2.2rem,11vw,6rem)] leading-[1.12] font-semibold tracking-[-0.05em] sm:text-[clamp(2.2rem,8.8vw,6rem)]"
+            className="group mx-auto font-display text-[clamp(2rem,9.2vw,2.6rem)] leading-[1.12] font-semibold tracking-[-0.05em] sm:text-[clamp(2.2rem,7vw,4.75rem)]"
           >
             <span className="block whitespace-nowrap">
-              Build, run,{" "}
+              Run, fix,{" "}
               <span className="block sm:inline">
                 and grow{" "}
                 <PopTile
@@ -44,14 +47,7 @@ export function Hero() {
               </span>
             </span>{" "}
             <span className="block whitespace-nowrap">
-              your restaurant{" "}
-              <PopTile
-                icon={ChefHatIcon}
-                delay={290}
-                end
-                floating
-                className="bg-linear-to-br from-[rgb(238,174,202)] to-[rgb(202,140,214)]"
-              />
+              your <RotatingBusiness />
             </span>{" "}
             <span className="block whitespace-nowrap">
               with{" "}

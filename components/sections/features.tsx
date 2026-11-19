@@ -82,7 +82,7 @@ export function Features() {
       <Container>
         <h2
           id="features-title"
-          className="mx-auto max-w-4xl text-center font-display text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.045em] text-balance sm:text-[3.75rem] lg:text-[4.5rem]"
+          className="mx-auto max-w-4xl text-center font-display text-[1.875rem] leading-[1.06] font-semibold tracking-[-0.045em] text-balance sm:text-[3rem] lg:text-[3.5rem]"
         >
           One sentence instead of{" "}
           <em className={cn(accentSerif.className, "text-[1.12em] leading-none tracking-[-0.01em] whitespace-nowrap")}>
@@ -108,7 +108,7 @@ export function Features() {
                 !feature.dark && "ring-1 ring-foreground/[0.06] ring-inset",
               )}
             >
-              <h3 className="font-display text-[1.75rem] leading-[1.1] font-medium tracking-[-0.045em] sm:text-[2.1rem]">
+              <h3 className="font-display text-[1.375rem] leading-[1.12] font-medium tracking-[-0.04em] sm:text-[1.75rem]">
                 {feature.title}
               </h3>
               <p className={cn("mt-2 text-[15px] leading-relaxed", feature.dark ? "text-white/65" : "text-foreground/70")}>

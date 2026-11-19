@@ -8,7 +8,7 @@ export function ClosingCta() {
         <div className="relative isolate overflow-hidden rounded-[2rem] bg-hero-gradient px-5 py-16 text-center sm:px-12 sm:py-28">
           <h2
             id="closing-title"
-            className="mx-auto max-w-3xl font-display text-[2.4rem] leading-[1.04] font-semibold tracking-[-0.045em] text-balance sm:text-[4rem]"
+            className="mx-auto max-w-3xl font-display text-[1.875rem] leading-[1.06] font-semibold tracking-[-0.045em] text-balance sm:text-[3rem] lg:text-[3.5rem]"
           >
             Your restaurant, one conversation away.
           </h2>
