@@ -7,6 +7,8 @@ import { FeatureVideo } from "@/components/sections/feature-video";
 import { Features } from "@/components/sections/features";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
+import { FIRST_CHANGE_MS, HOLD_MS, RotatingBusiness } from "@/components/sections/rotating-business";
+import { SwipeRow } from "@/components/ui/swipe-row";
 import { WaitlistSheetProvider } from "@/components/waitlist/waitlist-sheet";
 
 // next/font is compiled by Next.js; outside it, stand in a plain class.
@@ -29,17 +31,22 @@ function tick(count: number) {
 }
 
 describe("Home hero", () => {
-  it("leads with the statement, decorative tiles, and the one-line description", () => {
+  it("leads with the headline, decorative tiles, and the one-line description", () => {
     render(
       <WaitlistSheetProvider>
         <Hero />
       </WaitlistSheetProvider>,
     );
-    const heading = screen.getByRole("heading", { level: 1 });
+    // Screen readers get one fixed sentence; the rotating word is hidden.
+    const heading = screen.getByRole("heading", {
+      level: 1,
+      name: "Run, fix, and grow your restaurant, café, bar, bakery, or food truck with agents.",
+    });
 
-    expect(heading.textContent?.replace(/\s+/g, " ").trim()).toBe("ResAI is your restaurant’s AI agent");
     // Three icon tiles, all hidden from screen readers.
-    const tiles = heading.querySelectorAll(':scope > span > span[aria-hidden="true"]');
+    const tiles = [...heading.querySelectorAll('span[aria-hidden="true"]')].filter((el) =>
+      el.querySelector("svg"),
+    );
     expect(tiles).toHaveLength(3);
     tiles.forEach((tile) => expect(tile.querySelector("svg")).not.toBeNull());
     // The setup's IntersectionObserver stub reports it in view right away.
@@ -161,5 +168,97 @@ describe("Assistant tabs", () => {
     await user.keyboard("{ArrowLeft}");
     expect(screen.getByRole("tab", { name: "Sales" })).toHaveFocus();
     expect(screen.getByText("Here’s your answer")).toBeInTheDocument();
+  });
+});
+
+describe("Rotating business word", () => {
+  const active = (container: HTMLElement) => container.querySelector('[data-state="active"]')?.textContent;
+  const tileIcon = (container: HTMLElement) =>
+    container.querySelector('[data-icon-state="active"] svg')?.getAttribute("class") ?? "";
+
+  it("cycles through business types with matching tiles, and keeps going", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <h1 className="group">
+        <RotatingBusiness />
+      </h1>,
+    );
+    expect(active(container)).toBe("restaurant");
+    expect(tileIcon(container)).toMatch(/chef-hat/);
+
+    act(() => vi.advanceTimersByTime(FIRST_CHANGE_MS));
+    expect(active(container)).toBe("café");
+    expect(tileIcon(container)).toMatch(/coffee/);
+    // The word it replaced lifts away.
+    expect(container.querySelector('[data-state="past"]')).toHaveTextContent("restaurant");
+
+    // One step per hold, then round again rather than stopping.
+    for (const word of ["bar", "bakery", "food truck", "restaurant", "café", "bar"]) {
+      act(() => vi.advanceTimersByTime(HOLD_MS));
+      expect(active(container)).toBe(word);
+    }
+    expect(tileIcon(container)).toMatch(/wine/);
+  });
+
+  it("pauses while the tab is hidden and resumes when it's back", () => {
+    vi.useFakeTimers();
+    const { container } = render(
+      <h1 className="group">
+        <RotatingBusiness />
+      </h1>,
+    );
+    act(() => vi.advanceTimersByTime(FIRST_CHANGE_MS));
+    expect(active(container)).toBe("café");
+
+    const setHidden = (hidden: boolean) => {
+      Object.defineProperty(document, "hidden", { value: hidden, configurable: true });
+      act(() => {
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
+    };
+    setHidden(true);
+    act(() => vi.advanceTimersByTime(HOLD_MS * 5));
+    expect(active(container)).toBe("café");
+
+    setHidden(false);
+    act(() => vi.advanceTimersByTime(HOLD_MS));
+    expect(active(container)).toBe("bar");
+  });
+
+  it("stays on restaurant under reduced motion", () => {
+    flags.__reducedMotion = true;
+    vi.useFakeTimers();
+    const { container } = render(
+      <h1 className="group">
+        <RotatingBusiness />
+      </h1>,
+    );
+    act(() => vi.advanceTimersByTime(FIRST_CHANGE_MS + HOLD_MS * 6));
+    expect(active(container)).toBe("restaurant");
+    expect(screen.getByText("restaurant, café, bar, bakery, or food truck")).toHaveClass("sr-only");
+  });
+});
+
+describe("Swipe row (phones)", () => {
+  it("is a labelled, keyboard-reachable region with one dot per card", async () => {
+    const user = userEvent.setup();
+    render(
+      <SwipeRow label="Example requests">
+        <article>One</article>
+        <article>Two</article>
+        <article>Three</article>
+        <article>Four</article>
+      </SwipeRow>,
+    );
+    const region = screen.getByRole("region", { name: "Example requests" });
+    expect(region).toHaveAttribute("tabindex", "0");
+
+    const dots = screen.getAllByRole("button", { name: /show example \d of 4/i });
+    expect(dots).toHaveLength(4);
+    expect(dots[0]).toHaveAttribute("aria-current", "true");
+
+    await user.click(dots[2]);
+    expect(dots[2]).toHaveAttribute("aria-current", "true");
+    expect(dots[0]).not.toHaveAttribute("aria-current");
   });
 });

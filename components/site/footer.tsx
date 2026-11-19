@@ -42,8 +42,8 @@ export function SiteFooter() {
               Restaurant software you can talk to.
             </p>
             <p className="max-w-xs text-sm leading-relaxed text-white/60">
-              An AI agent for independent restaurants, cafés, and bars. In
-              early development.
+              An AI agent for independent restaurants, cafés, bars,
+              bakeries, and food trucks. In early development.
             </p>
             <a
               href={`mailto:${siteConfig.contactEmail}`}

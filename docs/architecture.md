@@ -33,13 +33,13 @@ components/
     scenarios.ts            The six scripted scenarios (all example data)
     match-prompt.ts         Routes typed text to a scenario, or admits it can't
     cards/                  One result card per scenario
-  sections/               Hero + showcase strip, features ("one sentence" boxes,
-                          played by feature-video), how it works, demo (assistant
-                          tabs), vision, founder, waitlist, FAQ, closing CTA
+  sections/               Hero (+ rotating-business word), features ("one sentence" boxes, played by
+                          feature-video), how it works, demo (assistant tabs +
+                          join prompt), founder, vision, waitlist, FAQ, closing CTA
   site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
-                          and Magic UI effects
+                          Magic UI effects, and the phone swipe row
 lib/
   site.ts                 Site name, URL, contact email, privacy-notice version and date
   faq.ts                  FAQ copy (page + structured data)
@@ -58,8 +58,8 @@ docs/                     You are here
 ```
 
 Page order (`app/(site)/page.tsx`): Hero → Features ("One sentence instead of a dozen
-clicks" boxes) → How it works → Demo ("One assistant for the whole back office" tabs) →
-Vision → Founder → Waitlist → FAQ → Closing CTA.
+clicks" boxes) → How it works → Demo ("One assistant for the whole back office" tabs,
+then a join prompt) → Founder → Vision → Waitlist → FAQ → Closing CTA.
 
 ## Request path for a signup
 
@@ -108,7 +108,7 @@ IP per 10 minutes.
 
 ## Tests
 
-`npm test` runs 108 tests:
+`npm test` runs 110 tests:
 
 | Suite | Covers |
 | --- | --- |
@@ -120,6 +120,5 @@ IP per 10 minutes.
 | `waitlist-cta.test.tsx` | The pill opens the page, focus moves in and returns on Escape, the draft survives close and reopen, `#join` opens it |
 | `demo-logic.test.ts` | Prompt routing and price math |
 | `agent-demo.test.tsx` | Labeling, autoplay, scenario selection, approval copy, rounding toggle, free-text fallback |
-| `showcase.test.tsx` | The scrolling tiles are inert and hidden from screen readers; the pause control works |
-| `home-sections.test.tsx` | Hero headline and tiles, the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
+| `home-sections.test.tsx` | Hero headline and tiles, the rotating business word (keeps cycling, matching icons, pauses on a hidden tab, reduced motion), the phone swipe row's dots, the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
 | `v2.test.tsx` | Landing page B: the before/after demo, task tabs, the floating join card |

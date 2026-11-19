@@ -54,8 +54,8 @@ export default function HomePage() {
       <Features />
       <HowItWorks />
       <Demo />
-      <Vision />
       <FounderStory />
+      <Vision />
       <Waitlist />
       <Faq />
       <ClosingCta />

@@ -4,7 +4,7 @@ import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
 import { waitlistPerks } from "@/lib/waitlist/perks";
 
 const joinSteps = [
-  "Your restaurant name and number of locations",
+  "Your business name and number of locations",
   "Email and phone, so we can reach you",
   "The POS problems that slow you down",
 ];
@@ -22,7 +22,7 @@ export function Waitlist() {
             <Eyebrow>Early access</Eyebrow>
             <h2
               id="waitlist-title"
-              className="mt-5 font-display text-[2.25rem] leading-[1.05] font-semibold tracking-[-0.028em] text-balance sm:text-[3rem]"
+              className="mt-5 font-display text-[1.625rem] leading-[1.08] font-semibold tracking-[-0.028em] text-balance sm:text-[2.5rem]"
             >
               Help shape ResAI.
             </h2>
@@ -66,7 +66,7 @@ export function Waitlist() {
                 </li>
               ))}
             </ol>
-            <WaitlistCta label="Join the waitlist" className="mt-8 sm:w-full" />
+            <WaitlistCta className="mt-8 sm:w-full" />
           </div>
         </div>
       </Container>

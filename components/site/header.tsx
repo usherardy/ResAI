@@ -87,7 +87,7 @@ export function SiteHeader() {
             }}
             className="inline-flex h-10 cursor-pointer items-center rounded-lg bg-foreground px-4 text-[15px] font-medium text-background transition-colors hover:bg-foreground/85 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
           >
-            Join waitlist
+            Join the waitlist
           </button>
           <button
             type="button"

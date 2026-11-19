@@ -13,7 +13,7 @@ function renderPill() {
   );
 }
 
-const pill = () => screen.getByRole("button", { name: /join the early-access waitlist/i });
+const pill = () => screen.getByRole("button", { name: "Join the waitlist" });
 
 afterEach(() => {
   window.history.replaceState(null, "", "/");

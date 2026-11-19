@@ -65,7 +65,7 @@ export function SectionHeading({
       <h2
         id={id}
         className={cn(
-          "font-display text-[2.25rem] leading-[1.08] font-medium tracking-[-0.045em] text-balance sm:text-[3rem]",
+          "font-display text-[1.625rem] leading-[1.1] font-medium tracking-[-0.04em] text-balance sm:text-[2.5rem]",
           eyebrow && "mt-5",
         )}
       >

@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils";
  * reveals: then the slot widens so the words glide apart, and the tile pops
  * in with a small overshoot and turn. `end` is for a tile that ends its line,
  * so the slot leaves no trailing gap. `floating` adds a slow bob once it has
- * landed. Decorative only; reduced motion shows the finished state.
+ * landed. Pass `children` instead of `icon` to supply your own icon content
+ * (e.g. stacked icons that crossfade with a rotating word). Decorative only;
+ * reduced motion shows the finished state.
  */
 export function PopTile({
   icon: Icon,
@@ -15,12 +17,14 @@ export function PopTile({
   delay,
   end = false,
   floating = false,
+  children,
 }: {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   className: string;
   delay: number;
   end?: boolean;
   floating?: boolean;
+  children?: React.ReactNode;
 }) {
   return (
     <span
@@ -48,7 +52,7 @@ export function PopTile({
           className,
         )}
       >
-        <Icon className="size-[0.5em]" strokeWidth={1.75} />
+        {children ?? (Icon ? <Icon className="size-[0.5em]" strokeWidth={1.75} /> : null)}
       </span>
     </span>
   );

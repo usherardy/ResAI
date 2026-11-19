@@ -180,7 +180,7 @@ export function HowItWorks() {
         <Eyebrow className="text-center">How it works</Eyebrow>
         <h2
           id="how-title"
-          className="mx-auto mt-4 max-w-4xl text-center font-display text-[2.5rem] leading-[1.04] font-semibold tracking-[-0.045em] text-balance sm:text-[3.75rem] lg:text-[4.5rem]"
+          className="mx-auto mt-4 max-w-4xl text-center font-display text-[1.875rem] leading-[1.06] font-semibold tracking-[-0.045em] text-balance sm:text-[3rem] lg:text-[3.5rem]"
         >
           Ask. Review.{" "}
           <em className={cn(accentSerif.className, "text-[1.12em] leading-none tracking-[-0.01em]")}>Approve.</em>
@@ -242,7 +242,7 @@ export function HowItWorks() {
                     <p className="text-[12px] font-semibold tracking-[0.14em] text-brand-strong uppercase">
                       Step {i + 1}
                     </p>
-                    <h3 className="mt-2 font-display text-[1.9rem] leading-none font-semibold tracking-[-0.045em]">
+                    <h3 className="mt-2 font-display text-[1.5rem] leading-none font-semibold tracking-[-0.04em] sm:text-[1.625rem]">
                       {step.title}
                     </h3>
                     <p className="mx-auto mt-3 max-w-[19rem] text-[15px] leading-relaxed text-pretty text-foreground/70 lg:text-balance">

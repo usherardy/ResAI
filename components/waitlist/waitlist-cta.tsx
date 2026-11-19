@@ -9,7 +9,7 @@ import { useWaitlistSheet } from "@/components/waitlist/waitlist-sheet";
  *
  * At rest it's a pill with an ember knob. On hover (or keyboard focus) the
  * knob slides across to the left and turns into an arrow. Clicking opens the
- * "Join the waitlist" panel, which slides in from the left.
+ * "Join the waitlist" page, which slides in from the right.
  */
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
@@ -29,7 +29,7 @@ type WaitlistCtaProps = {
 
 export function WaitlistCta({
   tone = "dark",
-  label = "Join the early-access waitlist",
+  label = "Join the waitlist",
   className,
 }: WaitlistCtaProps) {
   const { open } = useWaitlistSheet();

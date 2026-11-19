@@ -8,8 +8,8 @@ All of these open the same full-page form:
 
 | Where | What it is |
 | --- | --- |
-| Hero, "Help shape ResAI" section, closing section | The black pill "Join the early-access waitlist" with the orange knob (`WaitlistCta`) |
-| Header | The "Join waitlist" button |
+| Hero, after the One assistant demo, "Help shape ResAI" section, closing section | The black pill "Join the waitlist" with the orange knob (`WaitlistCta`) |
+| Header | The "Join the waitlist" button |
 | Footer | The "Join the waitlist" link (`#join`) |
 | Any link to `#join` or `/#join` | Opens the page from anywhere on the site, e.g. in emails or ads |
 

@@ -30,6 +30,15 @@ closing section and the join page. `bg-dot-grid` adds a faint dot texture.
 
 - **Inter** for everything (`font-sans`, and `font-display` for headlines,
   set semibold with tight tracking, around -0.03em to -0.04em).
+- **Headline sizes (desktop / phone):**
+  - Hero: 76 / 36px.
+  - Main section headlines: 56 / 30px ("One sentence…", "Ask. Review.
+    Approve.", "One assistant…", closing).
+  - Smaller section headlines: 40 / 26px (Vision, Help shape ResAI, FAQ).
+  - Card titles: 26–28 / 22–24px.
+  - Founder quote: 36 / 21px.
+  - Body text: 15–18px.
+  - Keep each level clearly below the one above it.
 - **Geist Mono** for small uppercase eyebrows like "EARLY ACCESS"
   (`font-mono`, 11px, wide tracking), usually with a small orange dot.
 - **Instrument Serif italic** (`lib/fonts.ts`) only as an accent for one
@@ -64,9 +73,24 @@ delays. Keep new motion in CSS so it inherits this.
 - **Sheet** (`components/ui/sheet.tsx`): shadcn/Radix dialog used for the
   join page. Override size and motion through `className`; `cn` merges
   Tailwind classes, so later classes win.
-- **Hero headline** (`components/sections/hero.tsx`): centered "ResAI is
-  your restaurant's AI agent" on three fixed lines with rounded gradient icon
-  tiles (chef hat, receipt, chat; `PopTile` in `components/ui/pop-tile.tsx`).
+- **Hero headline** (`components/sections/hero.tsx`): centered "Run, fix,
+  and grow your restaurant with agents." on fixed lines (three from 640px
+  wide, four on phones, where the first line splits after "fix,") with
+  rounded gradient icon tiles (growth chart, chef hat, chat; `PopTile` in
+  `components/ui/pop-tile.tsx`). "restaurant" rotates through café, bar,
+  bakery and food truck (`RotatingBusiness` in
+  `components/sections/rotating-business.tsx`), with the tile's icon
+  swapping to match (coffee cup, wine glass, croissant, truck). It starts
+  at 2.8s and keeps cycling, 3s per word, while the hero is on screen; it
+  pauses when the visitor scrolls away or switches tabs and resumes one hold
+  after they're back. Each
+  change is one crossfade on a shared 650ms ease-in-out curve: the old word
+  blurs and lifts out (a bit faster, 360ms) while the new one blurs and
+  rises in (after 90ms), the slot's width glides to the new word, and the
+  tile's stacked icons crossfade with a slight turn. Nothing is clipped and
+  there's no empty beat. Screen readers
+  hear one fixed sentence ("…your restaurant, café, bar, bakery, or food
+  truck…"); reduced motion stays on "restaurant".
   It first reads as a plain sentence. On load (`RevealOnView` in
   `components/ui/reveal-on-view.tsx`) each tile's slot widens so the words
   glide apart (900ms) and the tile pops in with a small overshoot and turn
@@ -83,7 +107,11 @@ delays. Keep new motion in CSS so it inherits this.
   pop, sales bars grow, fix steps land, the bar-tabs switch flips on). A
   status caption (You type → ResAI is working → Ready) and a thin progress
   bar narrate it. It plays once (the right-hand box 450ms later), then shows
-  Replay. Under reduced motion the boxes show finished.
+  Replay. Under reduced motion the boxes show finished. On phones (below
+  768px) the boxes sit in one swipeable row (`SwipeRow` in
+  `components/ui/swipe-row.tsx`): each card is 86% wide so the next one
+  peeks in, it snaps card by card, and dots underneath show and jump to the
+  current card. From 768px up it's the two-column grid.
 - **How it works stepper** (`components/sections/how-it-works.tsx`): "Ask.
   Review. *Approve.*" as Step 1 / 2 / 3, following one example (a lunch
   special) from request to live. From 1024px wide, numbered badges sit
@@ -103,8 +131,10 @@ delays. Keep new motion in CSS so it inherits this.
   gives way to the result card and reply. The first tab plays when the
   section scrolls into view; choosing a tab plays it; Replay repeats it.
   Scenarios and cards come from `components/demo/`. (The free-typing
-  `AgentDemo` is no longer on the page.)
-- **Magic UI effects** in `components/ui/` (marquee in use; shimmer button,
+  `AgentDemo` is no longer on the page.) The panel ends with a join prompt,
+  "Want this for your restaurant?", plus the waitlist pill, so there's a
+  join button right after the visitor has seen a result.
+- **Magic UI effects** in `components/ui/` (marquee in use on `/v2`; shimmer button,
   shiny text, border beam, shine border and spotlight card available) are
   adapted from [Magic UI](https://magicui.design) (MIT), rewritten to use CSS
   animation only.
@@ -118,8 +148,6 @@ delays. Keep new motion in CSS so it inherits this.
 - The feature boxes and the assistant tabs play once when scrolled into view
   (no loop) and offer Replay. With reduced motion they skip typing and show
   results immediately.
-- The showcase strip has a visible pause button and pauses on hover. Under
-  reduced motion it becomes a single static row you can scroll sideways.
 - Every page is statically prerendered. Client JavaScript is limited to the
   header menu, the demo, the forms, the join page, the scroll reveals and
   the FAQ accordion. No images, analytics or third-party scripts.

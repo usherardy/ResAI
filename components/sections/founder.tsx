@@ -13,7 +13,7 @@ export function FounderStory() {
             Why we’re building this
           </h2>
           <figure className="mt-8">
-            <blockquote className="font-display text-[1.45rem] leading-[1.28] font-medium tracking-[-0.03em] text-balance sm:text-[2.25rem] lg:text-[2.7rem] lg:leading-[1.18]">
+            <blockquote className="font-display text-[1.3rem] leading-[1.3] font-medium tracking-[-0.03em] text-balance sm:text-[1.875rem] lg:text-[2.25rem] lg:leading-[1.22]">
               <p>
                 “After working in restaurant POS technical support, I saw how
                 much time restaurant owners lose to complicated settings and
