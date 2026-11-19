@@ -2,6 +2,7 @@ import { CheckIcon, TriangleAlertIcon } from "lucide-react";
 import { Container } from "@/components/site/section";
 import { FeatureVideo } from "@/components/sections/feature-video";
 import { RevealOnView } from "@/components/ui/reveal-on-view";
+import { SwipeRow } from "@/components/ui/swipe-row";
 import { accentSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +12,8 @@ import { cn } from "@/lib/utils";
  * plays like a short screen recording (`FeatureVideo`): the request is
  * typed and sent, ResAI shows what it's checking, then the reply and result
  * build (chips pop, bars grow, checks land, the switch flips on). Reduced
- * motion shows the finished boxes. Example data only.
+ * motion shows the finished boxes. On phones the boxes sit in a swipeable
+ * row (`SwipeRow`) instead of a tall stack. Example data only.
  */
 
 type Feature = {
@@ -93,12 +95,13 @@ export function Features() {
           No settings menus, no IT tickets, no waiting on hold.
         </p>
 
-        <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-14 sm:gap-4 md:grid-cols-2">
+        <SwipeRow label="Example requests" className="mt-10 sm:mt-14">
           {features.map((feature, i) => (
             <RevealOnView
               as="article"
               key={feature.title}
-              threshold={0.2}
+              // Low, so on phones the next card is visible as it peeks in.
+              threshold={0.05}
               // The right-hand box in each row follows the left one by a beat.
               style={after((i % 2) * 120)}
               className={cn(
@@ -130,7 +133,7 @@ export function Features() {
               </div>
             </RevealOnView>
           ))}
-        </div>
+        </SwipeRow>
       </Container>
     </section>
   );
@@ -156,7 +159,7 @@ function MenuVisual() {
               style={after(250 + i * 130)}
               className={cn(
                 pop,
-                "origin-right rounded-full border border-brand/25 bg-brand-soft px-2 py-px text-[11.5px] text-brand-strong",
+                "origin-right rounded-full border border-brand/25 bg-brand-soft px-2 py-px text-[11.5px] whitespace-nowrap text-brand-strong",
               )}
             >
               + Oat milk $0.75

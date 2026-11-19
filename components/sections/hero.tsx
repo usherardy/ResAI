@@ -73,6 +73,9 @@ export function Hero() {
               Try the demo
             </a>
           </div>
+          <p className="mt-4 animate-fade-up text-[14px] text-foreground/70 [animation-delay:700ms] motion-reduce:animate-none">
+            Free to join · Nothing changes without your OK.
+          </p>
         </Container>
       </div>
     </section>

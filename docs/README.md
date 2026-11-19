@@ -11,6 +11,7 @@ it, what data it collects, how the signup works, and what's left before launch.
 | [Architecture](architecture.md) | Find your way around the code, the request path, spam protection and tests |
 | [Design](design.md) | Use the colors, type, gradient, motion and components consistently |
 | [Launch checklist](launch-checklist.md) | See what's done, what's left, and the open decisions |
+| [Recommendations](recommendations.md) | See what to improve next on the landing page, most important first |
 
 ## The short version
 

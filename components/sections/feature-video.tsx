@@ -182,7 +182,8 @@ export function FeatureVideo({ title, example, work, reply, visual, startDelay =
               )}
             >
               <p className="text-[13.5px] leading-snug">{reply}</p>
-              <div className="mt-3">{visual}</div>
+              {/* On phones the result spans the full width, starting under the logo. */}
+              <div className="mt-3 -ms-[2.125rem] sm:ms-0">{visual}</div>
             </div>
           </div>
         </div>

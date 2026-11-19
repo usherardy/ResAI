@@ -8,6 +8,7 @@ import { Features } from "@/components/sections/features";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
 import { FIRST_CHANGE_MS, HOLD_MS, RotatingBusiness } from "@/components/sections/rotating-business";
+import { SwipeRow } from "@/components/ui/swipe-row";
 import { WaitlistSheetProvider } from "@/components/waitlist/waitlist-sheet";
 
 // next/font is compiled by Next.js; outside it, stand in a plain class.
@@ -235,5 +236,29 @@ describe("Rotating business word", () => {
     act(() => vi.advanceTimersByTime(FIRST_CHANGE_MS + HOLD_MS * 6));
     expect(active(container)).toBe("restaurant");
     expect(screen.getByText("restaurant, café, bar, bakery, or food truck")).toHaveClass("sr-only");
+  });
+});
+
+describe("Swipe row (phones)", () => {
+  it("is a labelled, keyboard-reachable region with one dot per card", async () => {
+    const user = userEvent.setup();
+    render(
+      <SwipeRow label="Example requests">
+        <article>One</article>
+        <article>Two</article>
+        <article>Three</article>
+        <article>Four</article>
+      </SwipeRow>,
+    );
+    const region = screen.getByRole("region", { name: "Example requests" });
+    expect(region).toHaveAttribute("tabindex", "0");
+
+    const dots = screen.getAllByRole("button", { name: /show example \d of 4/i });
+    expect(dots).toHaveLength(4);
+    expect(dots[0]).toHaveAttribute("aria-current", "true");
+
+    await user.click(dots[2]);
+    expect(dots[2]).toHaveAttribute("aria-current", "true");
+    expect(dots[0]).not.toHaveAttribute("aria-current");
   });
 });

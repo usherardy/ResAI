@@ -43,7 +43,7 @@ export const businesses: { word: string; icon: LucideIcon }[] = [
 /** After the tiles have landed. */
 export const FIRST_CHANGE_MS = 2800;
 /** How long each word stays. */
-export const HOLD_MS = 2100;
+export const HOLD_MS = 3000;
 
 /** One duration and curve for everything that moves, so it reads as one motion. */
 const MOTION = "duration-[650ms] ease-[cubic-bezier(0.45,0,0.2,1)]";

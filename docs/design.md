@@ -81,7 +81,7 @@ delays. Keep new motion in CSS so it inherits this.
   bakery and food truck (`RotatingBusiness` in
   `components/sections/rotating-business.tsx`), with the tile's icon
   swapping to match (coffee cup, wine glass, croissant, truck). It starts
-  at 2.8s and keeps cycling, 2.1s per word, while the hero is on screen; it
+  at 2.8s and keeps cycling, 3s per word, while the hero is on screen; it
   pauses when the visitor scrolls away or switches tabs and resumes one hold
   after they're back. Each
   change is one crossfade on a shared 650ms ease-in-out curve: the old word
@@ -107,7 +107,11 @@ delays. Keep new motion in CSS so it inherits this.
   pop, sales bars grow, fix steps land, the bar-tabs switch flips on). A
   status caption (You type → ResAI is working → Ready) and a thin progress
   bar narrate it. It plays once (the right-hand box 450ms later), then shows
-  Replay. Under reduced motion the boxes show finished.
+  Replay. Under reduced motion the boxes show finished. On phones (below
+  768px) the boxes sit in one swipeable row (`SwipeRow` in
+  `components/ui/swipe-row.tsx`): each card is 86% wide so the next one
+  peeks in, it snaps card by card, and dots underneath show and jump to the
+  current card. From 768px up it's the two-column grid.
 - **How it works stepper** (`components/sections/how-it-works.tsx`): "Ask.
   Review. *Approve.*" as Step 1 / 2 / 3, following one example (a lunch
   special) from request to live. From 1024px wide, numbered badges sit

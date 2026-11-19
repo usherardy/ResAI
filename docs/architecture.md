@@ -39,7 +39,7 @@ components/
   site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
-                          and Magic UI effects
+                          Magic UI effects, and the phone swipe row
 lib/
   site.ts                 Site name, URL, contact email, privacy-notice version and date
   faq.ts                  FAQ copy (page + structured data)
@@ -108,7 +108,7 @@ IP per 10 minutes.
 
 ## Tests
 
-`npm test` runs 109 tests:
+`npm test` runs 110 tests:
 
 | Suite | Covers |
 | --- | --- |
@@ -120,5 +120,5 @@ IP per 10 minutes.
 | `waitlist-cta.test.tsx` | The pill opens the page, focus moves in and returns on Escape, the draft survives close and reopen, `#join` opens it |
 | `demo-logic.test.ts` | Prompt routing and price math |
 | `agent-demo.test.tsx` | Labeling, autoplay, scenario selection, approval copy, rounding toggle, free-text fallback |
-| `home-sections.test.tsx` | Hero headline and tiles, the rotating business word (keeps cycling, matching icons, pauses on a hidden tab, reduced motion), the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
+| `home-sections.test.tsx` | Hero headline and tiles, the rotating business word (keeps cycling, matching icons, pauses on a hidden tab, reduced motion), the phone swipe row's dots, the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
 | `v2.test.tsx` | Landing page B: the before/after demo, task tabs, the floating join card |
