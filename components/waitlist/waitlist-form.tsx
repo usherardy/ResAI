@@ -256,13 +256,6 @@ export function WaitlistForm({ draft, onDone, animated = false }: WaitlistFormPr
           as early access opens up. No spam, and we won&apos;t sell your
           information.
         </p>
-        <p className="mt-6 text-sm text-muted-foreground">
-          Changed your mind?{" "}
-          <Link href="/opt-out" className="font-medium text-foreground underline underline-offset-4">
-            Opt out anytime
-          </Link>
-          .
-        </p>
         {onDone ? (
           <button
             type="button"

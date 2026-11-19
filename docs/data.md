@@ -133,8 +133,8 @@ order by 3 desc;
 
 ## Opt-outs and deletion requests
 
-- **Opt-out:** visitors use `/opt-out` (linked in the footer, the success
-  message and the privacy policy). It adds their email to `outreach_opt_outs`,
+- **Opt-out:** visitors use `/opt-out` (linked in the footer, the form's
+  privacy note and the privacy policy). It adds their email to `outreach_opt_outs`,
   sets `contact_opt_out = true` and `research_consent = false` on their lead,
   and stamps `opted_out_at`. Treat it as covering **all** outreach, including
   phone.

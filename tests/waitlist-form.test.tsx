@@ -87,7 +87,7 @@ describe("WaitlistForm", () => {
     resolve(new Response(JSON.stringify({ ok: true, message: "ok" }), { status: 200 }));
     expect(await screen.findByRole("heading", { name: /you're on the list/i })).toBeInTheDocument();
     expect(screen.getByText("owner@cornerslice.com")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /opt out anytime/i })).toHaveAttribute("href", "/opt-out");
+    expect(screen.queryByRole("link", { name: /opt out/i })).not.toBeInTheDocument();
   });
 
   it("toggles POS problem chips and the optional location choice off again", async () => {

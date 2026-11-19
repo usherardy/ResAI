@@ -84,7 +84,7 @@ animation. The page simply appears and disappears.
 
 | Response | When | What the visitor sees |
 | --- | --- | --- |
-| **200** | Stored. Also returned for duplicates and suspected bots (nothing is stored for those) | "You're on the list." with their email and an opt-out link |
+| **200** | Stored. Also returned for duplicates and suspected bots (nothing is stored for those) | "You're on the list." with their email (opting out lives in the footer and privacy policy) |
 | **400** | Invalid answers (or invalid JSON) | Field messages + "Please check the highlighted fields." |
 | **403** | Cross-site request | "Cross-site requests aren't allowed." |
 | **413** | Body over 10 KB | "Request is too large." |
