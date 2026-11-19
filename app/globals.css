@@ -5,15 +5,16 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-serif: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   /* Brand accent: a single ember / tomato orange. */
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
   --color-surface: var(--surface);
+  --color-ink: var(--ink);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
@@ -48,6 +49,71 @@
   --animate-caret: caret 1s steps(1) infinite;
   --animate-soft-pulse: soft-pulse 2.4s ease-in-out infinite;
   --animate-dot-bounce: dot-bounce 1.2s ease-in-out infinite;
+
+  /* Magic UI component animations (see components/ui/*). */
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-shiny-text: shiny-text 8s infinite;
+  --animate-shimmer-slide: shimmer-slide var(--speed) ease-in-out infinite alternate;
+  --animate-spin-around: spin-around calc(var(--speed) * 2) infinite linear;
+  --animate-shine: shine var(--duration) infinite linear;
+  --animate-border-beam: border-beam var(--duration) infinite linear;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes shiny-text {
+    0%,
+    90%,
+    100% {
+      background-position: calc(-100% - var(--shiny-width)) 0;
+    }
+    30%,
+    60% {
+      background-position: calc(100% + var(--shiny-width)) 0;
+    }
+  }
+  @keyframes shimmer-slide {
+    to {
+      transform: translate(calc(100cqw - 100%), 0);
+    }
+  }
+  @keyframes spin-around {
+    0% {
+      transform: translateZ(0) rotate(0);
+    }
+    15%,
+    35% {
+      transform: translateZ(0) rotate(90deg);
+    }
+    65%,
+    85% {
+      transform: translateZ(0) rotate(270deg);
+    }
+    100% {
+      transform: translateZ(0) rotate(360deg);
+    }
+  }
+  @keyframes shine {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 100%;
+    }
+    to {
+      background-position: 0% 0%;
+    }
+  }
+  @keyframes border-beam {
+    to {
+      offset-distance: 100%;
+    }
+  }
 
   @keyframes fade-up {
     from {
@@ -104,25 +170,28 @@
   color-scheme: light;
   --radius: 0.625rem;
 
-  /* Warm off-white canvas, near-black ink. */
-  --background: oklch(0.985 0.003 80);
-  --surface: oklch(0.97 0.004 80);
-  --foreground: oklch(0.17 0.006 60);
+  /* White canvas, black ink, warm gray panels. */
+  /* Warm off-white canvas with white cards. */
+  --background: oklch(0.975 0.004 95);
+  --surface: oklch(0.945 0.012 70);
+  /* Near-black for full-bleed dark sections. */
+  --ink: oklch(0.13 0.004 60);
+  --foreground: oklch(0.145 0.003 60);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.17 0.006 60);
+  --card-foreground: oklch(0.145 0.003 60);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.17 0.006 60);
-  --primary: oklch(0.17 0.006 60);
+  --popover-foreground: oklch(0.145 0.003 60);
+  --primary: oklch(0.145 0.003 60);
   --primary-foreground: oklch(0.99 0.002 80);
   --secondary: oklch(0.955 0.004 80);
-  --secondary-foreground: oklch(0.17 0.006 60);
+  --secondary-foreground: oklch(0.145 0.003 60);
   --muted: oklch(0.955 0.004 80);
   /* ~5.4:1 on the canvas: passes WCAG AA for body text. */
   --muted-foreground: oklch(0.47 0.01 60);
   --accent: oklch(0.95 0.005 80);
-  --accent-foreground: oklch(0.17 0.006 60);
+  --accent-foreground: oklch(0.145 0.003 60);
   --destructive: oklch(0.53 0.2 27);
-  --border: oklch(0.905 0.006 75);
+  --border: oklch(0.9 0.005 75);
   --input: oklch(0.87 0.008 75);
   --ring: oklch(0.64 0.19 38);
 
@@ -148,7 +217,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "ss01", "cv11";
   }
   ::selection {
     background: oklch(0.64 0.19 38 / 0.18);
@@ -194,4 +262,22 @@
 
 @utility tabular {
   font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Sunset gradient for the hero: orange rising from the bottom edge through
+ * peach and pink into lavender and sky blue. Values from a 21st.dev demo.
+ */
+@utility bg-hero-gradient {
+  background-color: rgb(202 179 214);
+  background-image: radial-gradient(
+    125% 125% at 50% 101%,
+    rgba(245, 87, 2, 1) 10.5%,
+    rgba(245, 120, 2, 1) 16%,
+    rgba(245, 140, 2, 1) 17.5%,
+    rgba(245, 170, 100, 1) 25%,
+    rgba(238, 174, 202, 1) 40%,
+    rgba(202, 179, 214, 1) 65%,
+    rgba(148, 201, 233, 1) 100%
+  );
 }

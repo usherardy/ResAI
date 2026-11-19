@@ -1,28 +1,38 @@
-import { NfcIcon } from "lucide-react";
+import {
+  MessagesSquareIcon,
+  MonitorSmartphoneIcon,
+  NfcIcon,
+  SmartphoneIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { Container, SectionHeading } from "@/components/site/section";
 
-const capabilities = [
+const capabilities: { icon: LucideIcon; title: string; body: string }[] = [
   {
+    icon: SmartphoneIcon,
     title: "Take orders on a phone or tablet",
-    body: "Ring up orders at the counter, tableside, or out on the patio.",
+    body: "At the counter, at the table, or out on the patio.",
   },
   {
-    title: "Contactless payments on supported devices",
-    body: "Tap to Pay on supported phones and tablets, processed by certified payment providers.",
+    icon: NfcIcon,
+    title: "Tap to Pay on supported devices",
+    body: "Contactless payments, processed by certified payment providers.",
   },
   {
-    title: "The same agent, wherever you are",
-    body: "Change the menu or check sales from the floor instead of the back office.",
+    icon: MessagesSquareIcon,
+    title: "The same agent, anywhere",
+    body: "Check sales or change the menu from the floor.",
   },
   {
-    title: "Less dedicated hardware",
-    body: "Use devices that fit your space instead of buying a terminal for every station.",
+    icon: MonitorSmartphoneIcon,
+    title: "Less hardware to buy",
+    body: "Use devices you already have instead of a terminal at every station.",
   },
 ];
 
 function PlannedBadge() {
   return (
-    <span className="shrink-0 rounded-full border border-brand/25 bg-brand-soft px-2 py-0.5 font-mono text-[10.5px] font-medium tracking-wide text-brand-strong uppercase">
+    <span className="rounded-md border border-white/15 bg-white/[0.08] px-2 py-0.5 font-mono text-[11px] font-medium tracking-[0.1em] text-white/80 uppercase">
       Planned
     </span>
   );
@@ -30,44 +40,49 @@ function PlannedBadge() {
 
 export function Vision() {
   return (
-    <section
-      id="vision"
-      aria-labelledby="vision-title"
-      className="overflow-hidden border-t border-border bg-surface/70 py-20 sm:py-28"
-    >
-      <Container className="grid items-center gap-16 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
-        <div>
-          <SectionHeading
-            id="vision-title"
-            eyebrow="Vision · where we’re headed"
-            title="The POS in your pocket."
-            description="After the agent, we plan to build a phone and tablet POS that runs on hardware you may already own, so there’s less to buy, mount, and maintain."
+    <section id="vision" aria-labelledby="vision-title" className="scroll-mt-20 pb-24 sm:pb-32">
+      <Container>
+        <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-ink px-6 py-14 text-white sm:px-12 sm:py-16 lg:px-16">
+          <div
+            aria-hidden="true"
+            className="absolute top-0 right-0 -z-10 h-[40rem] w-[50rem] max-w-full bg-[radial-gradient(closest-side,oklch(0.64_0.19_38/0.22),transparent)]"
           />
+          <div className="grid items-center gap-16 lg:grid-cols-[1.15fr_1fr] lg:gap-12">
+            <div>
+              <SectionHeading
+                id="vision-title"
+                tone="dark"
+                eyebrow="Vision · where we’re headed"
+                title="The POS in your pocket."
+                description="Next, we plan to build a phone and tablet POS that runs on devices you may already own. Less to buy, mount, and maintain."
+              />
+              <p className="mt-8 max-w-xl text-[13px] leading-relaxed text-white/55">
+                <span className="font-medium text-white/85">
+                  These are planned capabilities and aren&apos;t available today.
+                </span>{" "}
+                ResAI doesn&apos;t process payments. When we offer contactless
+                payments, certified payment providers will handle them, and
+                availability will depend on device model, operating system
+                version, location, and card or wallet support.
+              </p>
+            </div>
 
-          <ul className="mt-10 divide-y divide-border border-y border-border">
+            <PhoneMockup />
+          </div>
+
+          <ul className="mt-20 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((c) => (
-              <li key={c.title} className="flex items-start justify-between gap-4 py-4">
-                <div>
-                  <h3 className="font-medium">{c.title}</h3>
-                  <p className="mt-1 text-[15px] text-muted-foreground">{c.body}</p>
+              <li key={c.title} className="border-l border-white/20 pr-6 pl-6">
+                <div className="flex items-center justify-between gap-3">
+                  <c.icon className="size-6 text-white/90" strokeWidth={1.5} aria-hidden="true" />
+                  <PlannedBadge />
                 </div>
-                <PlannedBadge />
+                <h3 className="mt-6 text-lg font-medium">{c.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-white/60">{c.body}</p>
               </li>
             ))}
           </ul>
-
-          <p className="mt-6 text-[13px] leading-relaxed text-muted-foreground">
-            <span className="font-medium text-foreground">
-              These are planned capabilities and aren&apos;t available today.
-            </span>{" "}
-            ResAI doesn&apos;t process payments. When we offer contactless
-            payments, certified payment providers will handle them, and
-            availability will depend on device model, operating system version,
-            location, and card or wallet support.
-          </p>
         </div>
-
-        <PhoneMockup />
       </Container>
     </section>
   );
@@ -75,20 +90,21 @@ export function Vision() {
 
 function PhoneMockup() {
   return (
-    <figure className="relative mx-auto w-full max-w-[19rem]">
+    <figure className="relative isolate mx-auto w-full max-w-[19rem]">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-[-35%] top-[15%] bottom-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,oklch(0.64_0.19_38/0.45),transparent)] blur-2xl"
+      />
       <div
         role="img"
         aria-label="Concept mockup of a phone showing a Tap to Pay screen for a $44.64 order. Not a working product."
-        className="relative rounded-[3rem] bg-foreground p-2.5 shadow-[0_30px_60px_-20px_oklch(0_0_0/0.35),0_0_0_1px_oklch(0_0_0/0.08)]"
+        className="relative rounded-[3rem] bg-neutral-800 p-2.5 shadow-[0_40px_80px_-30px_oklch(0_0_0/0.8)] ring-1 ring-white/15"
       >
-        <div className="relative flex aspect-[9/19] flex-col overflow-hidden rounded-[2.5rem] bg-card px-5 pt-3 pb-5">
-          {/* Status bar */}
+        <div className="relative flex aspect-[9/19] flex-col overflow-hidden rounded-[2.5rem] bg-card px-5 pt-3 pb-5 text-foreground">
           <div className="flex h-7 items-center justify-between text-[11px] font-semibold" aria-hidden="true">
             <span>12:32</span>
-            <span className="absolute top-2.5 left-1/2 h-[22px] w-[5.5rem] -translate-x-1/2 rounded-full bg-foreground" />
-            <span className="flex items-center gap-1">
-              <span className="h-2 w-3.5 rounded-[2px] border border-foreground/70" />
-            </span>
+            <span className="absolute top-2.5 left-1/2 h-[22px] w-[5.5rem] -translate-x-1/2 rounded-full bg-neutral-900" />
+            <span className="h-2 w-3.5 rounded-[2px] border border-foreground/70" />
           </div>
 
           <div className="mt-4 flex items-center justify-between text-[11px] text-muted-foreground">
@@ -137,7 +153,7 @@ function PhoneMockup() {
           </div>
         </div>
       </div>
-      <figcaption className="mt-5 text-center text-xs text-muted-foreground">
+      <figcaption className="mt-5 text-center text-xs text-white/55">
         Concept mockup. Not a working product.
       </figcaption>
     </figure>

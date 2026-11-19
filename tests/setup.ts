@@ -55,4 +55,8 @@ if (typeof window !== "undefined") {
   if (!Element.prototype.scrollTo) {
     Element.prototype.scrollTo = function scrollTo() {};
   }
+
+  if (!Element.prototype.scrollIntoView) {
+    Element.prototype.scrollIntoView = function scrollIntoView() {};
+  }
 }

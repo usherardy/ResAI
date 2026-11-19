@@ -29,12 +29,12 @@ export function Faq() {
 
         <Accordion
           type="multiple"
-          defaultValue={["item-0", "item-1"]}
+          defaultValue={["item-0"]}
           className="border-t border-border"
         >
           {faqs.map((faq, i) => (
             <AccordionItem key={faq.question} value={`item-${i}`} className="border-border">
-              <AccordionTrigger className="py-5 text-base font-medium hover:no-underline focus-visible:ring-ring/50 [&[data-state=open]]:text-foreground">
+              <AccordionTrigger className="py-6 text-[17px] font-medium hover:no-underline focus-visible:ring-ring/50">
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent className="pb-5 text-[15px] leading-relaxed text-muted-foreground">

@@ -1,14 +1,15 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "ResAI: Run your restaurant. Just ask. An AI-native operating system for restaurants.";
+  "ResAI: Manage your restaurant in plain English. An AI assistant for restaurants, coming soon.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 const INK = "#1c1a17";
-const MUTED = "#6b665f";
-const CANVAS = "#faf9f7";
+const MUTED = "#b5afa7";
+const CANVAS = "#0b0a09";
 const BRAND = "#e2582f";
+const LINE = "rgba(255,255,255,0.18)";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -21,8 +22,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           background: CANVAS,
+          backgroundImage: "radial-gradient(ellipse 70% 60% at 50% 100%, rgba(226,88,47,0.55), rgba(226,88,47,0) 70%)",
           padding: "72px 80px",
-          color: INK,
+          color: "#fff",
           fontFamily: "sans-serif",
         }}
       >
@@ -32,7 +34,7 @@ export default function OpengraphImage() {
               width: 52,
               height: 52,
               borderRadius: 13,
-              background: INK,
+              background: "#fff",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -40,9 +42,9 @@ export default function OpengraphImage() {
               gap: 8,
             }}
           >
-            <div style={{ width: 26, height: 5, borderRadius: 3, background: "#fff" }} />
+            <div style={{ width: 26, height: 5, borderRadius: 3, background: INK }} />
             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <div style={{ width: 14, height: 5, borderRadius: 3, background: "#fff" }} />
+              <div style={{ width: 14, height: 5, borderRadius: 3, background: INK }} />
               <div style={{ width: 7, height: 7, borderRadius: 4, background: BRAND }} />
             </div>
           </div>
@@ -52,7 +54,7 @@ export default function OpengraphImage() {
               marginLeft: 16,
               fontSize: 20,
               color: MUTED,
-              border: "1px solid #e4e1dc",
+              border: `1px solid ${LINE}`,
               borderRadius: 999,
               padding: "6px 16px",
               display: "flex",
@@ -64,10 +66,10 @@ export default function OpengraphImage() {
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ fontSize: 26, color: MUTED, marginBottom: 18 }}>
-            The AI-native operating system for restaurants
+            An AI assistant for restaurants
           </div>
           <div style={{ fontSize: 92, fontWeight: 700, letterSpacing: -4, lineHeight: 1 }}>
-            Run your restaurant.
+            Manage your restaurant
           </div>
           <div
             style={{
@@ -78,7 +80,7 @@ export default function OpengraphImage() {
               lineHeight: 1.1,
             }}
           >
-            Just ask<span style={{ color: BRAND }}>.</span>
+            in plain English<span style={{ color: BRAND }}>.</span>
           </div>
         </div>
 
@@ -86,8 +88,8 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              background: INK,
-              color: "#fff",
+              background: "#fff",
+              color: INK,
               fontSize: 24,
               padding: "14px 22px",
               borderRadius: 22,
@@ -98,12 +100,12 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              background: "#fff",
-              border: "1px solid #e4e1dc",
+              background: "rgba(255,255,255,0.08)",
+              border: `1px solid ${LINE}`,
               fontSize: 24,
               padding: "14px 22px",
               borderRadius: 22,
-              color: MUTED,
+              color: "#fff",
             }}
           >
             5 changes ready · Approve?

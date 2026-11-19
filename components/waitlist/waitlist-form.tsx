@@ -10,6 +10,7 @@ import { NativeSelect } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
 import { siteConfig } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import { WAITLIST_PREFILL_EVENT, type WaitlistPrefill } from "@/lib/waitlist/prefill";
 import {
   LIMITS,
   fieldErrorsFrom,
@@ -85,6 +86,7 @@ export function WaitlistForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [honeypot, setHoneypot] = useState("");
   const [submittedEmail, setSubmittedEmail] = useState("");
+  const [prefilled, setPrefilled] = useState(false);
 
   const startedAt = useRef<number>(0);
   const formRef = useRef<HTMLFormElement>(null);
@@ -96,6 +98,36 @@ export function WaitlistForm() {
 
   useEffect(() => {
     if (status === "success") successRef.current?.focus();
+  }, [status]);
+
+  // An email entered in one of the page's quick CTAs (see waitlist-cta.tsx).
+  useEffect(() => {
+    const onPrefill = (event: Event) => {
+      event.preventDefault();
+      if (status === "success") {
+        successRef.current?.scrollIntoView({ block: "center" });
+        return;
+      }
+      const form = formRef.current;
+      if (!form) return;
+      if (status === "idle") {
+        const { email } = (event as CustomEvent<WaitlistPrefill>).detail;
+        setValues((v) => ({ ...v, email }));
+        setErrors((current) => {
+          const next = { ...current };
+          delete next.email;
+          return next;
+        });
+        setPrefilled(true);
+        // The email is done, so move on to the next required field.
+        form
+          .querySelector<HTMLInputElement>('[name="businessName"]')
+          ?.focus({ preventScroll: true });
+      }
+      form.scrollIntoView({ block: "start" });
+    };
+    window.addEventListener(WAITLIST_PREFILL_EVENT, onPrefill);
+    return () => window.removeEventListener(WAITLIST_PREFILL_EVENT, onPrefill);
   }, [status]);
 
   const set = <K extends keyof Values>(field: K, value: Values[K]) => {
@@ -234,6 +266,16 @@ export function WaitlistForm() {
       aria-busy={submitting}
       className="space-y-5"
     >
+      {prefilled ? (
+        <p
+          role="status"
+          className="flex animate-fade-up items-center gap-2.5 rounded-lg bg-brand-soft px-3.5 py-3 text-sm leading-snug text-foreground"
+        >
+          <span className="size-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+          Almost there. Add your restaurant&apos;s name to finish joining.
+        </p>
+      ) : null}
+
       <div className="grid gap-5 sm:grid-cols-2">
         <Field id={id("email")} label="Email" required error={errors.email} className="sm:col-span-2">
           <Input
@@ -418,7 +460,7 @@ export function WaitlistForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 text-[15px] font-medium text-background transition-colors hover:bg-foreground/85 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-wait disabled:opacity-80"
+          className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-2.5 text-center text-[16px] font-medium text-background transition-colors hover:bg-foreground/85 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none disabled:cursor-wait disabled:opacity-80"
         >
           {submitting ? (
             <>
@@ -428,7 +470,10 @@ export function WaitlistForm() {
           ) : (
             <>
               Join the early-access waitlist
-              <ArrowRightIcon className="size-4" aria-hidden="true" />
+              <ArrowRightIcon
+                className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
             </>
           )}
         </button>

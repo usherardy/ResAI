@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <Container className="py-28 text-center">
       <p className="font-mono text-xs tracking-[0.08em] text-brand-strong uppercase">404</p>
-      <h1 className="mt-4 text-4xl font-semibold tracking-[-0.03em]">
+      <h1 className="mt-4 font-display text-[2.6rem] leading-[1.05] font-semibold tracking-[-0.035em]">
         We couldn&apos;t find that page.
       </h1>
       <p className="mt-4 text-muted-foreground">It may have moved, or it never existed.</p>

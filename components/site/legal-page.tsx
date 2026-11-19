@@ -15,7 +15,7 @@ export function LegalPage({
     <Container className="py-16 sm:py-24">
       <article className="mx-auto max-w-2xl">
         <header className="border-b border-border pb-8">
-          <h1 className="text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">{title}</h1>
+          <h1 className="font-display text-[2.6rem] leading-[1.05] font-semibold tracking-[-0.035em] sm:text-[3.25rem]">{title}</h1>
           {updated ? (
             <p className="mt-4 font-mono text-xs text-muted-foreground uppercase">
               Effective {updated}

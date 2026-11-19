@@ -1,6 +1,6 @@
 # ResAI: landing page and early-access waitlist
 
-Marketing site for ResAI, an AI-native operating system for independent US
+Marketing site for ResAI, an AI assistant for independent US
 restaurants, cafés, and bars. The site has an interactive concept demo and a
 working waitlist backed by Supabase.
 
@@ -35,10 +35,14 @@ components/
     scenarios.ts            The six scripted scenarios (all example data)
     match-prompt.ts         Routes typed text to a scenario, or admits it can't
     cards/                  One result card per scenario
-  sections/               Hero, benefits, vision, how it works, founder, waitlist, FAQ
+  sections/               Hero + showcase strip, statement, how it works, features
+                          (live demo + feature cards), vision, founder, waitlist,
+                          FAQ, closing CTA
   site/                   Header, footer, logo, layout helpers
-  waitlist/               Waitlist form and opt-out form (client)
-  ui/                     shadcn/ui primitives + a styled native <select>
+  waitlist/               Waitlist form, quick email button, opt-out form (client)
+  ui/                     shadcn/ui primitives, a styled native <select>, and
+                          Magic UI effects (marquee in use; shimmer button, shiny
+                          text, border beam, shine border, spotlight card available)
 lib/
   site.ts                 Site name, URL, contact email, privacy-notice version
   faq.ts                  FAQ copy (page + structured data)
@@ -161,7 +165,7 @@ order by l.created_at desc;
 
 ## Tests
 
-`npm test` runs 67 tests:
+`npm test` runs 75 tests:
 
 - `schema.test.ts`: normalization, required fields, limits, enums, link spam.
 - `service.test.ts`: success, duplicate, validation, honeypot, timing,
@@ -176,6 +180,10 @@ order by l.created_at desc;
   400/429/503 handling, network failure.
 - `agent-demo.test.tsx`: labeling, autoplay, scenario selection, approval
   copy, rounding toggle, free-text fallback.
+- `waitlist-cta.test.tsx`: the quick email button opens, validates, hands
+  the email to the full form, closes on Escape, and falls back without a form.
+- `showcase.test.tsx`: the scrolling tiles are inert and hidden from screen
+  readers, and the pause control works.
 
 ## Before launch
 
@@ -194,6 +202,14 @@ order by l.created_at desc;
 - The demo plays one run when it scrolls into view (no loop). With
   `prefers-reduced-motion`, it skips typing and shows results immediately.
   All CSS animation is disabled under reduced motion.
+- Design: Inter throughout on a warm off-white canvas, a left-aligned hero
+  with a scrolling strip of example tiles, softly tinted rounded cards, the
+  sunset gradient on the closing section, and a black footer.
+- The showcase strip has a visible pause button and pauses on hover. Under
+  reduced motion it becomes a single static row you can scroll sideways.
+- Visual effects in `components/ui/` are adapted from [Magic UI](https://magicui.design)
+  (MIT). They were rewritten to use CSS animation only, so the site has no
+  animation library dependency.
 - Every page is statically prerendered. Client JavaScript is limited to the
   header menu, demo, forms, and FAQ accordion. No images, no analytics, no
   third-party scripts.

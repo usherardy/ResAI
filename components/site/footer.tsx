@@ -2,58 +2,77 @@ import Link from "next/link";
 import { Logo } from "@/components/site/logo";
 import { siteConfig } from "@/lib/site";
 
+const columns: { title: string; links: { href: string; label: string }[] }[] = [
+  {
+    title: "ResAI",
+    links: [
+      { href: "/#demo", label: "Try the demo" },
+      { href: "/#how-it-works", label: "How it works" },
+      { href: "/#vision", label: "Vision" },
+      { href: "/#faq", label: "FAQ" },
+    ],
+  },
+  {
+    title: "Early access",
+    links: [
+      { href: "/#waitlist", label: "Join the waitlist" },
+      { href: "/opt-out", label: "Opt out of emails" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/terms", label: "Terms" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-10 sm:px-8 md:flex-row md:items-start md:justify-between">
-        <div className="space-y-3">
-          <Logo />
-          <p className="max-w-xs text-sm text-muted-foreground">
-            An AI-native operating system for independent restaurants, cafés,
-            and bars. In early development.
-          </p>
+    <footer className="bg-ink text-white">
+      <div className="mx-auto max-w-7xl px-5 pt-16 pb-10 sm:px-8 lg:px-10">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">
+          <div className="space-y-4">
+            <Logo inverted />
+            <p className="max-w-xs font-display text-[1.75rem] leading-[1.15] font-medium tracking-[-0.04em]">
+              Restaurant software you can talk to.
+            </p>
+            <p className="max-w-xs text-sm leading-relaxed text-white/60">
+              An AI agent for independent restaurants, cafés, and bars. In
+              early development.
+            </p>
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="inline-block text-sm font-medium text-white underline-offset-4 hover:underline"
+            >
+              {siteConfig.contactEmail}
+            </a>
+          </div>
+
+          {columns.map((column) => (
+            <nav key={column.title} aria-label={column.title}>
+              <h2 className="text-[12px] font-semibold tracking-[0.14em] text-white/45 uppercase">{column.title}</h2>
+              <ul className="mt-4 space-y-3 text-[15px]">
+                {column.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-white/85 underline-offset-4 hover:text-white hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))}
         </div>
 
-        <nav aria-label="Footer" className="text-sm">
-          <ul className="grid grid-cols-2 gap-x-10 gap-y-3 sm:flex sm:flex-wrap sm:gap-x-8">
-            <li>
-              <a
-                href={`mailto:${siteConfig.contactEmail}`}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                {siteConfig.contactEmail}
-              </a>
-            </li>
-            <li>
-              <Link
-                href="/privacy"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Privacy Policy
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/terms"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Terms
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/opt-out"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Opt out of emails
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <div className="mx-auto max-w-6xl px-5 pb-10 text-xs text-muted-foreground sm:px-8">
-        © {siteConfig.copyrightYear} {siteConfig.name}. ResAI is pre-launch and
-        not yet available for purchase.
+        <div className="mt-14 flex flex-col gap-2 border-t border-white/15 pt-6 text-xs text-white/50 sm:flex-row sm:justify-between">
+          <p>© {siteConfig.copyrightYear} {siteConfig.name}</p>
+          <p>ResAI is pre-launch and not yet available for purchase.</p>
+        </div>
       </div>
     </footer>
   );

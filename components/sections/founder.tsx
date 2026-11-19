@@ -3,17 +3,17 @@ import { Container } from "@/components/site/section";
 
 export function FounderStory() {
   return (
-    <section aria-labelledby="founder-title" className="border-t border-border py-20 sm:py-28">
+    <section aria-labelledby="founder-title" className="border-t border-border py-20 sm:py-32">
       <Container>
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-5xl text-center">
           <h2
             id="founder-title"
-            className="font-mono text-xs font-medium tracking-[0.08em] text-brand-strong uppercase"
+            className="text-[12px] font-semibold tracking-[0.14em] text-muted-foreground uppercase"
           >
             Why we’re building this
           </h2>
-          <figure className="mt-6">
-            <blockquote className="font-serif text-[1.9rem] leading-[1.25] tracking-[-0.01em] text-pretty sm:text-[2.5rem] sm:leading-[1.2]">
+          <figure className="mt-8">
+            <blockquote className="font-display text-[1.7rem] leading-[1.25] font-medium tracking-[-0.03em] text-balance sm:text-[2.25rem] lg:text-[2.7rem] lg:leading-[1.18]">
               <p>
                 “After working in restaurant POS technical support, I saw how
                 much time restaurant owners lose to complicated settings and
@@ -22,7 +22,7 @@ export function FounderStory() {
                 as having a conversation?”
               </p>
             </blockquote>
-            <figcaption className="mt-8 flex items-center gap-3">
+            <figcaption className="mt-10 inline-flex items-center gap-3 text-left">
               <LogoMark className="size-9" />
               <div className="text-sm">
                 <p className="font-medium">Founder, ResAI</p>

@@ -8,7 +8,7 @@ export function Container({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("mx-auto w-full max-w-6xl px-5 sm:px-8", className)}>
+    <div className={cn("mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10", className)}>
       {children}
     </div>
   );
@@ -17,14 +17,17 @@ export function Container({
 export function Eyebrow({
   className,
   children,
+  tone = "light",
 }: {
   className?: string;
   children: React.ReactNode;
+  tone?: "light" | "dark";
 }) {
   return (
     <p
       className={cn(
-        "font-mono text-xs font-medium tracking-[0.08em] text-brand-strong uppercase",
+        "text-[12px] font-semibold tracking-[0.14em] uppercase",
+        tone === "dark" ? "text-white/60" : "text-muted-foreground",
         className,
       )}
     >
@@ -40,6 +43,7 @@ export function SectionHeading({
   id,
   className,
   align = "left",
+  tone = "light",
 }: {
   eyebrow?: string;
   title: React.ReactNode;
@@ -47,27 +51,59 @@ export function SectionHeading({
   id?: string;
   className?: string;
   align?: "left" | "center";
+  tone?: "light" | "dark";
 }) {
   return (
     <div
       className={cn(
-        "max-w-2xl space-y-4",
+        "max-w-2xl",
         align === "center" && "mx-auto text-center",
         className,
       )}
     >
-      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      {eyebrow ? <Eyebrow tone={tone}>{eyebrow}</Eyebrow> : null}
       <h2
         id={id}
-        className="text-3xl font-semibold tracking-[-0.025em] text-balance sm:text-[2.6rem] sm:leading-[1.08]"
+        className={cn(
+          "font-display text-[2.25rem] leading-[1.08] font-medium tracking-[-0.045em] text-balance sm:text-[3rem]",
+          eyebrow && "mt-5",
+        )}
       >
         {title}
       </h2>
       {description ? (
-        <p className="text-lg leading-relaxed text-pretty text-muted-foreground">
+        <p
+          className={cn(
+            "mt-5 text-lg leading-relaxed text-pretty",
+            tone === "dark" ? "text-white/70" : "text-muted-foreground",
+          )}
+        >
           {description}
         </p>
       ) : null}
     </div>
+  );
+}
+
+/** Underlined text link, the way Square styles secondary actions. */
+export function TextLink({
+  href,
+  children,
+  className,
+}: {
+  href: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      className={cn(
+        "inline-block border-b border-current pb-0.5 text-[15px] font-medium transition-opacity hover:opacity-70 focus-visible:rounded-sm focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none",
+        className,
+      )}
+    >
+      {children}
+    </a>
   );
 }
