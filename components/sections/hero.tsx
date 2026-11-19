@@ -5,8 +5,15 @@ import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
 export function Hero() {
   return (
     <section aria-labelledby="hero-title">
-      {/* Full-screen sunset gradient. It runs up under the transparent header. */}
-      <div className="-mt-16 flex min-h-svh flex-col justify-center bg-hero-gradient pt-16">
+      <div className="relative isolate -mt-16 flex min-h-svh flex-col justify-center pt-16">
+        {/* Full-screen sunset gradient on its own layer. It runs up under the
+            transparent header, spills a little past the hero, and fades into
+            the page with an eased mask so there's no hard edge. The text sits
+            above it, unfaded. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 -bottom-20 -z-10 bg-hero-gradient [mask-image:linear-gradient(to_bottom,#000_calc(100%_-_15rem),rgb(0_0_0/0.85)_calc(100%_-_10rem),rgb(0_0_0/0.4)_calc(100%_-_5rem),transparent)]"
+        />
         <Container className="py-14 sm:py-24">
           <h1
             id="hero-title"
@@ -19,7 +26,6 @@ export function Hero() {
             it drafts, and approve it. Nothing changes without your OK.
           </p>
 
-          {/* Top-aligned so an email error under the pill doesn't shift the other button. */}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-start">
             <WaitlistCta />
             <a
@@ -35,7 +41,8 @@ export function Hero() {
         </Container>
       </div>
 
-      <div className="pt-10 sm:pt-14">
+      {/* relative: paints the tiles above the gradient's fading tail. */}
+      <div className="relative pt-10 sm:pt-14">
         <Showcase />
       </div>
     </section>
