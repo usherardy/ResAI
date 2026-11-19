@@ -3,9 +3,9 @@ import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
 
 export function ClosingCta() {
   return (
-    <section aria-labelledby="closing-title" className="pb-24 sm:pb-32">
+    <section aria-labelledby="closing-title" className="pb-16 sm:pb-32">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[2rem] bg-hero-gradient px-6 py-20 text-center sm:px-12 sm:py-28">
+        <div className="relative isolate overflow-hidden rounded-[2rem] bg-hero-gradient px-5 py-16 text-center sm:px-12 sm:py-28">
           <h2
             id="closing-title"
             className="mx-auto max-w-3xl font-display text-[2.4rem] leading-[1.04] font-semibold tracking-[-0.045em] text-balance sm:text-[4rem]"

@@ -15,7 +15,7 @@ const columns: { title: string; links: { href: string; label: string }[] }[] = [
   {
     title: "Early access",
     links: [
-      { href: "/#waitlist", label: "Join the waitlist" },
+      { href: "#join", label: "Join the waitlist" },
       { href: "/opt-out", label: "Opt out of emails" },
     ],
   },
@@ -28,12 +28,15 @@ const columns: { title: string; links: { href: string; label: string }[] }[] = [
   },
 ];
 
+const footerLinkClass =
+  "inline-block py-1.5 text-white/85 underline-offset-4 hover:text-white hover:underline";
+
 export function SiteFooter() {
   return (
     <footer className="bg-ink text-white">
       <div className="mx-auto max-w-7xl px-5 pt-16 pb-10 sm:px-8 lg:px-10">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-          <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.4fr_repeat(3,1fr)] md:gap-12">
+          <div className="col-span-2 space-y-4 md:col-span-1">
             <Logo inverted />
             <p className="max-w-xs font-display text-[1.75rem] leading-[1.15] font-medium tracking-[-0.04em]">
               Restaurant software you can talk to.
@@ -53,15 +56,20 @@ export function SiteFooter() {
           {columns.map((column) => (
             <nav key={column.title} aria-label={column.title}>
               <h2 className="text-[12px] font-semibold tracking-[0.14em] text-white/45 uppercase">{column.title}</h2>
-              <ul className="mt-4 space-y-3 text-[15px]">
+              <ul className="mt-3 space-y-1 text-[15px]">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-white/85 underline-offset-4 hover:text-white hover:underline"
-                    >
-                      {link.label}
-                    </Link>
+                    {/* A plain <a> for "#join" so the browser fires hashchange,
+                        which opens the waitlist panel on any page. */}
+                    {link.href.startsWith("#") ? (
+                      <a href={link.href} className={footerLinkClass}>
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link href={link.href} className={footerLinkClass}>
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -11,7 +11,7 @@ import { siteConfig } from "@/lib/site";
 
 export function Faq() {
   return (
-    <section id="faq" aria-labelledby="faq-title" className="border-t border-border py-20 sm:py-28">
+    <section id="faq" aria-labelledby="faq-title" className="border-t border-border py-16 sm:py-28">
       <Container className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
         <div>
           <SectionHeading id="faq-title" eyebrow="FAQ" title="Straight answers." />

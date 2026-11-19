@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/site/legal-page";
-import { LEGAL_EFFECTIVE_DATE, siteConfig } from "@/lib/site";
+import { PRIVACY_UPDATED_DATE, siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
-      updated={LEGAL_EFFECTIVE_DATE}
+      updated={PRIVACY_UPDATED_DATE}
       intro={
         <p>
           ResAI is a pre-launch startup. Right now the only personal information
@@ -28,13 +28,13 @@ export default function PrivacyPage() {
       <p>When you join the waitlist, we collect:</p>
       <ul>
         <li>
-          <strong>Required:</strong> your email address and your restaurant or
-          business name.
+          <strong>Required:</strong> your restaurant or company name, email
+          address, and phone number.
         </li>
         <li>
-          <strong>Optional:</strong> your name, type of business, current POS
-          system, number of locations, your biggest POS frustration, and
-          whether you&apos;re open to a research call.
+          <strong>Optional:</strong> your website, number of locations, the POS
+          problems you pick, and anything else you choose to tell us about your
+          POS.
         </li>
         <li>
           <strong>Context:</strong> the date you signed up, which version of
@@ -56,19 +56,23 @@ export default function PrivacyPage() {
 
       <h2>How we use it</h2>
       <ul>
-        <li>To contact you about ResAI early access and related product updates.</li>
         <li>
-          If you opted in, to invite you to a short research call about how you
-          run your restaurant.
+          To contact you by email or phone about ResAI early access and related
+          product updates.
         </li>
         <li>
-          To decide what to build first. For example, which POS systems and
-          problems come up most. We look at this in aggregate.
+          To ask whether you&apos;d like a short conversation about how you run
+          your restaurant. Saying no doesn&apos;t affect your place on the list.
+        </li>
+        <li>
+          To decide what to build first. For example, which POS problems come up
+          most. We look at this in aggregate.
         </li>
       </ul>
       <p>
         We don&apos;t sell your personal information, and we don&apos;t share it
-        for advertising.
+        for advertising. We won&apos;t send you marketing text messages unless
+        you separately agree to them.
       </p>
 
       <h2>Who can see it</h2>

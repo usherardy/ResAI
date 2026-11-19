@@ -21,7 +21,7 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: "Will it work with my current POS?",
     answer:
-      "There are no POS integrations today. We’re deciding which systems to support first based on what owners on the waitlist use, so telling us your current POS in the form directly shapes that decision.",
+      "There are no POS integrations today. We’re deciding what to build first based on what owners on the waitlist tell us, so the POS problems you pick when you join directly shape that decision.",
   },
   {
     question: "Does ResAI process payments?",
@@ -36,11 +36,11 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: "How does early access work?",
     answer:
-      "Join the waitlist with your email and restaurant name. If you opt in, we may reach out for a short conversation about how you run things. As early versions are ready, we’ll invite owners in small groups to try them and give feedback. Joining doesn’t guarantee a spot in any particular group.",
+      "Join the waitlist with a few details about your restaurant and how to reach you. We may reach out for a short conversation about how you run things, and it’s fine to say no. As early versions are ready, we’ll invite owners in small groups to try them and give feedback. Joining doesn’t guarantee a spot in any particular group.",
   },
   {
     question: "What do you do with my information?",
     answer:
-      "We use it to contact you about ResAI early access and, only if you opted in, research calls. We don’t sell it. You can opt out anytime from the link in the footer, or ask us to delete your information by email.",
+      "We use it to contact you by email or phone about ResAI early access. We don’t sell it, and we won’t send marketing texts unless you agree to them separately. You can opt out anytime from the link in the footer, or ask us to delete your information by email.",
   },
 ];

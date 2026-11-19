@@ -2,12 +2,16 @@
 
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MenuIcon, XIcon } from "lucide-react";
 import { Logo } from "@/components/site/logo";
+import { useWaitlistSheet } from "@/components/waitlist/waitlist-sheet";
 import { navLinks } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const waitlist = useWaitlistSheet();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const menuId = useId();
@@ -29,11 +33,15 @@ export function SiteHeader() {
   }, [open]);
 
   const raised = scrolled || open;
+  // On the home page the header is see-through over the hero gradient until
+  // the visitor scrolls or opens the menu.
+  const overHero = pathname === "/" && !raised;
 
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 bg-background/90 text-foreground backdrop-blur-md transition-shadow duration-200",
+        "sticky top-0 z-50 text-foreground transition-[background-color,box-shadow] duration-200",
+        overHero ? "bg-transparent" : "bg-background/90 backdrop-blur-md",
         raised && "shadow-[0_1px_0_var(--border)]",
       )}
     >
@@ -66,19 +74,24 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <Link
             href="/#demo"
-            className="hidden h-9 items-center rounded-lg px-3 text-[15px] text-foreground/70 transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none sm:inline-flex"
+            className="hidden h-10 items-center rounded-lg px-3 text-[15px] text-foreground/70 transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none sm:inline-flex"
           >
             Try the demo
           </Link>
-          <Link
-            href="/#waitlist"
-            className="inline-flex h-9 items-center rounded-lg bg-foreground px-3.5 text-[15px] font-medium text-background transition-colors hover:bg-foreground/85 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
-          >
-            Join waitlist
-          </Link>
           <button
             type="button"
-            className="inline-flex size-9 items-center justify-center rounded-lg hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none md:hidden"
+            aria-haspopup="dialog"
+            onClick={() => {
+              setOpen(false);
+              waitlist.open();
+            }}
+            className="inline-flex h-10 cursor-pointer items-center rounded-lg bg-foreground px-4 text-[15px] font-medium text-background transition-colors hover:bg-foreground/85 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+          >
+            Join waitlist
+          </button>
+          <button
+            type="button"
+            className="inline-flex size-10 items-center justify-center rounded-lg hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none md:hidden"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? "Close menu" : "Open menu"}

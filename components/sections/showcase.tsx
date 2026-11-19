@@ -104,7 +104,7 @@ export function Showcase() {
           type="button"
           onClick={() => setPaused((p) => !p)}
           aria-pressed={paused}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground/[0.07] text-foreground/75 transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none motion-reduce:hidden"
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground/[0.07] text-foreground/75 transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none motion-reduce:hidden"
         >
           {paused ? (
             <PlayIcon className="size-3.5" aria-hidden="true" />

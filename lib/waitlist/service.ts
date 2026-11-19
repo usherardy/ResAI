@@ -11,12 +11,11 @@ import { fieldErrorsFrom, optOutSchema, waitlistSchema, type WaitlistData } from
 export type LeadRecord = {
   email: string;
   business_name: string;
-  contact_name: string | null;
-  restaurant_type: string | null;
-  current_pos: string | null;
+  phone: string;
+  website: string | null;
   location_count: string | null;
+  pos_problems: string[];
   pos_frustration: string | null;
-  research_consent: boolean;
   source: string;
   utm_source: string | null;
   utm_medium: string | null;
@@ -86,7 +85,8 @@ const fail = (
 function readSpamSignals(raw: unknown): { honeypot: boolean; elapsedMs: number | null } {
   if (!raw || typeof raw !== "object") return { honeypot: false, elapsedMs: null };
   const record = raw as Record<string, unknown>;
-  const honeypot = typeof record.website === "string" && record.website.trim() !== "";
+  // The forms send their hidden trap field as `honeypot`. People never see it.
+  const honeypot = typeof record.honeypot === "string" && record.honeypot.trim() !== "";
   const elapsed = record.elapsedMs;
   const elapsedMs =
     typeof elapsed === "number" && Number.isFinite(elapsed) && elapsed >= 0 ? elapsed : null;
@@ -97,12 +97,11 @@ export function toLeadRecord(data: WaitlistData): LeadRecord {
   return {
     email: data.email,
     business_name: data.businessName,
-    contact_name: data.name ?? null,
-    restaurant_type: data.restaurantType ?? null,
-    current_pos: data.currentPos ?? null,
+    phone: data.phone,
+    website: data.website ?? null,
     location_count: data.locations ?? null,
+    pos_problems: data.posProblems,
     pos_frustration: data.frustration ?? null,
-    research_consent: data.researchConsent,
     source: "landing_page",
     utm_source: data.utmSource ?? null,
     utm_medium: data.utmMedium ?? null,

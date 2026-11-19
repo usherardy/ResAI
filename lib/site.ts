@@ -30,7 +30,10 @@ export const siteConfig = {
  * It is stored with every waitlist signup so we know which version
  * the person saw.
  */
-export const PRIVACY_NOTICE_VERSION = "2026-11-18";
+export const PRIVACY_NOTICE_VERSION = "2026-11-19";
+/** "Last updated" on the privacy policy. Change with PRIVACY_NOTICE_VERSION. */
+export const PRIVACY_UPDATED_DATE = "November 19, 2026";
+/** "Last updated" on the terms. */
 export const LEGAL_EFFECTIVE_DATE = "November 18, 2026";
 
 export const navLinks = [

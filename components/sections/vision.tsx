@@ -40,9 +40,9 @@ function PlannedBadge() {
 
 export function Vision() {
   return (
-    <section id="vision" aria-labelledby="vision-title" className="scroll-mt-20 pb-24 sm:pb-32">
+    <section id="vision" aria-labelledby="vision-title" className="scroll-mt-20 pb-16 sm:pb-32">
       <Container>
-        <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-ink px-6 py-14 text-white sm:px-12 sm:py-16 lg:px-16">
+        <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-ink px-5 py-10 text-white sm:px-12 sm:py-16 lg:px-16">
           <div
             aria-hidden="true"
             className="absolute top-0 right-0 -z-10 h-[40rem] w-[50rem] max-w-full bg-[radial-gradient(closest-side,oklch(0.64_0.19_38/0.22),transparent)]"
@@ -70,7 +70,7 @@ export function Vision() {
             <PhoneMockup />
           </div>
 
-          <ul className="mt-20 grid gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-12 grid gap-y-8 sm:mt-20 sm:grid-cols-2 sm:gap-y-10 lg:grid-cols-4">
             {capabilities.map((c) => (
               <li key={c.title} className="border-l border-white/20 pr-6 pl-6">
                 <div className="flex items-center justify-between gap-3">
@@ -90,7 +90,7 @@ export function Vision() {
 
 function PhoneMockup() {
   return (
-    <figure className="relative isolate mx-auto w-full max-w-[19rem]">
+    <figure className="relative isolate mx-auto w-full max-w-[15rem] sm:max-w-[19rem]">
       <div
         aria-hidden="true"
         className="absolute inset-x-[-35%] top-[15%] bottom-[10%] -z-10 rounded-full bg-[radial-gradient(closest-side,oklch(0.64_0.19_38/0.45),transparent)] blur-2xl"

@@ -35,7 +35,7 @@ export function OptOutForm() {
       const response = await fetch("/api/opt-out", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, website: honeypot }),
+        body: JSON.stringify({ email, honeypot }),
       });
       const data = (await response.json().catch(() => ({}))) as {
         ok?: boolean;

@@ -52,7 +52,7 @@ const features: Feature[] = [
 
 export function Features() {
   return (
-    <section aria-labelledby="features-title" className="pb-24 sm:pb-32">
+    <section aria-labelledby="features-title" className="pb-16 sm:pb-32">
       <Container>
         <h2
           id="features-title"
@@ -61,7 +61,7 @@ export function Features() {
           No settings menus, no IT tickets, no waiting on hold.
         </h2>
 
-        <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-14 sm:gap-4 md:grid-cols-2">
           <article
             id="demo"
             aria-labelledby="demo-title"
@@ -94,7 +94,7 @@ export function Features() {
             <article
               key={feature.title}
               className={cn(
-                "flex min-w-0 flex-col overflow-hidden rounded-[1.75rem] p-6 sm:p-8",
+                "flex min-w-0 flex-col overflow-hidden rounded-[1.75rem] p-5 sm:p-8",
                 feature.tone,
                 !feature.dark && "ring-1 ring-foreground/[0.06] ring-inset",
               )}
@@ -108,7 +108,7 @@ export function Features() {
               <p className="sr-only">Example request: {feature.example}</p>
 
               <div aria-hidden="true" className="mt-8 flex flex-1 items-end">
-                <div className="w-full rounded-2xl bg-card p-4 text-foreground shadow-[0_24px_48px_-24px_oklch(0_0_0/0.35)]">
+                <div className="w-full rounded-2xl bg-card p-3.5 text-foreground sm:p-4 shadow-[0_24px_48px_-24px_oklch(0_0_0/0.35)]">
                   <div className="flex justify-end">
                     <p className="max-w-[88%] rounded-2xl rounded-br-md bg-foreground px-3.5 py-2 text-[13.5px] leading-snug text-background">
                       {feature.example}
