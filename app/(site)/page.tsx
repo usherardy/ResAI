@@ -1,10 +1,10 @@
 import { ClosingCta } from "@/components/sections/closing-cta";
+import { Demo } from "@/components/sections/demo";
 import { Faq } from "@/components/sections/faq";
 import { Features } from "@/components/sections/features";
 import { FounderStory } from "@/components/sections/founder";
 import { Hero } from "@/components/sections/hero";
 import { HowItWorks } from "@/components/sections/how-it-works";
-import { Statement } from "@/components/sections/statement";
 import { Vision } from "@/components/sections/vision";
 import { Waitlist } from "@/components/sections/waitlist";
 import { faqs } from "@/lib/faq";
@@ -51,9 +51,9 @@ export default function HomePage() {
         }}
       />
       <Hero />
-      <Statement />
-      <HowItWorks />
       <Features />
+      <HowItWorks />
+      <Demo />
       <Vision />
       <FounderStory />
       <Waitlist />

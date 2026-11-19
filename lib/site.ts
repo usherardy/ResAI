@@ -16,7 +16,7 @@ function normalizeUrl(url: string | undefined): string {
 
 export const siteConfig = {
   name: "ResAI",
-  title: "ResAI: Manage your restaurant in plain English",
+  title: "ResAI: Manage your restaurant by asking your agent",
   description:
     "ResAI is an AI assistant for independent restaurants, cafés, and bars. Update menus, change prices, check sales, and fix POS problems by typing what you need. Now taking early-access signups.",
   url: normalizeUrl(process.env.NEXT_PUBLIC_SITE_URL),

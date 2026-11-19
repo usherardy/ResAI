@@ -1,5 +1,8 @@
+import { ChefHatIcon, MessagesSquareIcon, ReceiptTextIcon } from "lucide-react";
 import { Container } from "@/components/site/section";
 import { Showcase } from "@/components/sections/showcase";
+import { PopTile } from "@/components/ui/pop-tile";
+import { RevealOnView } from "@/components/ui/reveal-on-view";
 import { WaitlistCta } from "@/components/waitlist/waitlist-cta";
 
 export function Hero() {
@@ -14,19 +17,54 @@ export function Hero() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 -bottom-20 -z-10 bg-hero-gradient [mask-image:linear-gradient(to_bottom,#000_calc(100%_-_15rem),rgb(0_0_0/0.85)_calc(100%_-_10rem),rgb(0_0_0/0.4)_calc(100%_-_5rem),transparent)]"
         />
-        <Container className="py-14 sm:py-24">
-          <h1
+        <Container className="py-14 text-center sm:py-24">
+          {/* Three fixed lines. It first reads as a plain sentence; on load
+              each tile's slot widens (the words glide apart) and the tile pops
+              in, one line after another, then bobs gently. The font scales
+              with the screen so each line fits on one row. The {" "} between
+              lines keeps it a proper sentence for screen readers. */}
+          <RevealOnView
+            as="h1"
             id="hero-title"
-            className="max-w-3xl font-display text-[2.6rem] leading-[1.04] font-semibold tracking-[-0.04em] text-balance sm:text-[3.6rem] lg:text-[4rem]"
+            threshold={0.3}
+            className="group mx-auto font-display text-[clamp(2.2rem,12vw,6rem)] leading-[1.12] font-semibold tracking-[-0.05em]"
           >
-            Manage your menu, prices, and POS in plain English
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-pretty text-foreground/80">
-            ResAI is an AI agent for restaurants. Type what you need, check what
-            it drafts, and approve it. Nothing changes without your OK.
+            <span className="block whitespace-nowrap">
+              ResAI is your{" "}
+              <PopTile
+                icon={ChefHatIcon}
+                delay={150}
+                end
+                floating
+                className="bg-linear-to-br from-[rgb(245,140,2)] to-[rgb(245,87,2)]"
+              />
+            </span>{" "}
+            <span className="block whitespace-nowrap">
+              restaurant&rsquo;s{" "}
+              <PopTile
+                icon={ReceiptTextIcon}
+                delay={290}
+                end
+                floating
+                className="bg-linear-to-br from-[rgb(238,174,202)] to-[rgb(202,140,214)]"
+              />
+            </span>{" "}
+            <span className="block whitespace-nowrap">
+              AI{" "}
+              <PopTile
+                icon={MessagesSquareIcon}
+                delay={430}
+                floating
+                className="bg-linear-to-br from-[rgb(148,201,233)] to-[rgb(110,160,230)]"
+              />
+              agent
+            </span>
+          </RevealOnView>
+          <p className="mx-auto mt-6 max-w-xl animate-fade-up text-lg leading-relaxed text-pretty text-foreground/80 [animation-delay:450ms] motion-reduce:animate-none sm:mt-8 sm:text-xl">
+            Manage your menu, prices, and POS by asking your agent.
           </p>
 
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-start">
+          <div className="mt-8 flex animate-fade-up flex-col gap-3 [animation-delay:600ms] motion-reduce:animate-none sm:flex-row sm:justify-center">
             <WaitlistCta />
             <a
               href="#demo"
@@ -35,9 +73,6 @@ export function Hero() {
               Try the demo
             </a>
           </div>
-          <p className="mt-4 text-sm text-foreground/75">
-            Coming soon for US restaurants, cafés, and bars.
-          </p>
         </Container>
       </div>
 

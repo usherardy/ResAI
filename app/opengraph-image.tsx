@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "ResAI: Manage your restaurant in plain English. An AI assistant for restaurants, coming soon.";
+  "ResAI: Manage your restaurant by asking your agent. An AI agent for restaurants, coming soon.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -80,7 +80,7 @@ export default function OpengraphImage() {
               lineHeight: 1.1,
             }}
           >
-            in plain English<span style={{ color: BRAND }}>.</span>
+            by asking your agent<span style={{ color: BRAND }}>.</span>
           </div>
         </div>
 

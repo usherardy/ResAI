@@ -18,7 +18,7 @@ export function Waitlist() {
     >
       <Container>
         <div className="grid gap-10 rounded-[2rem] bg-surface p-5 sm:p-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16 lg:p-14">
-          <div className="px-1 pt-3 sm:px-0 lg:pt-2">
+          <div className="min-w-0 px-1 pt-3 sm:px-0 lg:pt-2">
             <Eyebrow>Early access</Eyebrow>
             <h2
               id="waitlist-title"
@@ -48,7 +48,7 @@ export function Waitlist() {
             </ul>
           </div>
 
-          <div className="flex flex-col justify-center rounded-2xl bg-card p-6 shadow-[0_24px_48px_-28px_oklch(0_0_0/0.2)] sm:p-10 lg:self-center">
+          <div className="flex min-w-0 flex-col justify-center rounded-2xl bg-card p-6 shadow-[0_24px_48px_-28px_oklch(0_0_0/0.2)] sm:p-10 lg:self-center">
             <p className="font-mono text-[11px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
               Takes about a minute
             </p>
@@ -66,7 +66,7 @@ export function Waitlist() {
                 </li>
               ))}
             </ol>
-            <WaitlistCta className="mt-8 sm:w-full" />
+            <WaitlistCta label="Join the waitlist" className="mt-8 sm:w-full" />
           </div>
         </div>
       </Container>

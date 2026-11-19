@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
-import { SiteHeader } from "@/components/site/header";
-import { SiteFooter } from "@/components/site/footer";
-import { WaitlistSheetProvider } from "@/components/waitlist/waitlist-sheet";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -73,13 +70,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <WaitlistSheetProvider>
-          <SiteHeader />
-          <main id="main" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter />
-        </WaitlistSheetProvider>
+        {/* Each section brings its own chrome and <main id="main">:
+            app/(site)/layout.tsx for the public site, app/admin/ for the dashboard. */}
+        {children}
       </body>
     </html>
   );

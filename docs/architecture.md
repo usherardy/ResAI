@@ -17,29 +17,33 @@ guides in `node_modules/next/dist/docs/` before writing Next-specific code
 
 ```
 app/
-  layout.tsx              Fonts, metadata, header/footer, the waitlist page provider
-  page.tsx                Landing page sections + JSON-LD (Organization, WebSite, FAQPage)
+  layout.tsx              Fonts, metadata, skip link (each area brings its own chrome)
+  (site)/                 Public site: layout (header, footer, waitlist page),
+                          page.tsx (landing page sections + JSON-LD), privacy/,
+                          terms/, opt-out/, v2/ (landing page B, noindex)
   api/waitlist/route.ts   POST: waitlist signup
   api/opt-out/route.ts    POST: outreach opt-out
-  privacy/ terms/ opt-out/  Legal and opt-out pages
   opengraph-image.tsx     Generated 1200×630 OG image
   sitemap.ts robots.ts icon.svg not-found.tsx
 components/
-  demo/                   Interactive concept demo
-    agent-demo.tsx          Window, prompt picker, conversation, composer
+  demo/                   Concept demo pieces (scenarios and cards feed the home
+                          page's assistant tabs)
+    agent-demo.tsx          Free-typing chat demo (not on the page right now)
     use-demo-player.ts      Typing/steps timeline + reduced-motion handling
     scenarios.ts            The six scripted scenarios (all example data)
     match-prompt.ts         Routes typed text to a scenario, or admits it can't
     cards/                  One result card per scenario
-  sections/               Hero + showcase strip, statement, how it works, features,
-                          vision, founder, waitlist, FAQ, closing CTA
-  site/                   Header, footer, logo, layout helpers
+  sections/               Hero + showcase strip, features ("one sentence" boxes,
+                          played by feature-video), how it works, demo (assistant
+                          tabs), vision, founder, waitlist, FAQ, closing CTA
+  site/                   Header, footer, site chrome, logo, layout helpers
   waitlist/               Join page, form, the pill that opens it, opt-out form
   ui/                     shadcn/ui primitives (incl. sheet), a styled native <select>,
                           and Magic UI effects
 lib/
   site.ts                 Site name, URL, contact email, privacy-notice version and date
   faq.ts                  FAQ copy (page + structured data)
+  fonts.ts                Instrument Serif italic accent font
   waitlist/schema.ts      zod schema + option lists (shared browser/server)
   waitlist/perks.ts       The four "why join" perks
   waitlist/service.ts     Core signup/opt-out logic (framework-free, tested)
@@ -53,7 +57,8 @@ tests/                    Vitest suites
 docs/                     You are here
 ```
 
-Page order (`app/page.tsx`): Hero → Statement → How it works → Features →
+Page order (`app/(site)/page.tsx`): Hero → Features ("One sentence instead of a dozen
+clicks" boxes) → How it works → Demo ("One assistant for the whole back office" tabs) →
 Vision → Founder → Waitlist → FAQ → Closing CTA.
 
 ## Request path for a signup
@@ -103,7 +108,7 @@ IP per 10 minutes.
 
 ## Tests
 
-`npm test` runs 98 tests:
+`npm test` runs 108 tests:
 
 | Suite | Covers |
 | --- | --- |
@@ -116,3 +121,5 @@ IP per 10 minutes.
 | `demo-logic.test.ts` | Prompt routing and price math |
 | `agent-demo.test.tsx` | Labeling, autoplay, scenario selection, approval copy, rounding toggle, free-text fallback |
 | `showcase.test.tsx` | The scrolling tiles are inert and hidden from screen readers; the pause control works |
+| `home-sections.test.tsx` | Hero headline and tiles, the "one sentence" boxes, the How it works steps, a feature box playing through typing → working → result → Replay, the assistant tabs playing and switching |
+| `v2.test.tsx` | Landing page B: the before/after demo, task tabs, the floating join card |
